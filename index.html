@@ -10,74 +10,154 @@
     body { font-family: 'Play', sans-serif; background-color: #09090b; color: #e4e4e7; overflow-x: hidden; }
     .glass-panel { background: rgba(24, 24, 27, 0.8); backdrop-filter: blur(16px); border: 1px solid rgba(63, 63, 70, 0.5); }
     input, select, textarea { background-color: #18181b; border: 1px solid #3f3f46; color: #f4f4f5; outline: none; }
-    input:focus, select:focus, textarea:focus { border-color: #3b82f6; }
+    input:focus, select:focus, textarea:focus { border-color: #d946ef; }
+    
+    /* Modern, temiz buton tasarımı */
     .app-btn { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; aspect-ratio: 1 / 1; border-radius: 1.25rem; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
     .app-btn:active { transform: scale(0.95); }
-    .app-btn.disabled { opacity: 0.4; pointer-events: none; filter: grayscale(100%); }
-    .btn-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .app-btn.disabled { opacity: 0.3; pointer-events: none; filter: grayscale(100%); }
+    .btn-icon { width: 36px; height: 36px; margin-bottom: 12px; }
   </style>
 </head>
 <body class="flex items-center justify-center min-h-screen w-full px-4 py-8 relative">
   
-  <div id="giris-ekrani" class="glass-panel p-8 rounded-3xl shadow-2xl w-full max-w-sm flex flex-col justify-between min-h-[80vh]">
+  <div id="giris-ekrani" class="glass-panel p-8 rounded-3xl shadow-2xl w-full max-w-sm flex flex-col justify-between min-h-[85vh]">
     <div>
-      <div class="text-center mb-8">
-        <h1 class="text-4xl font-black tracking-wider text-white">TEMPO<span class="text-blue-500">TEAM</span></h1>
-        <p class="text-xs text-zinc-400 mt-1 uppercase tracking-widest">Personel Portalı</p>
+      <div class="text-center mb-10 mt-4">
+        <h1 class="text-4xl font-black tracking-widest text-white" style="font-family: Arial, sans-serif;">TEMPO<span class="text-fuchsia-500">TEAM</span></h1>
+        <div class="h-0.5 w-16 bg-fuchsia-500 mx-auto mt-2 opacity-50"></div>
       </div>
       <div class="space-y-4">
-        <input type="text" id="kadi-input" placeholder="Kullanıcı Adı" class="w-full px-5 py-4 rounded-xl text-sm font-medium">
-        <input type="password" id="sifre-input" placeholder="Şifre" class="w-full px-5 py-4 rounded-xl text-sm font-medium">
-        <button id="giris-yap-btn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl mt-4 shadow-lg transition">Giriş Yap</button>
+        <input type="text" id="kadi-input" placeholder="Kullanıcı Adı" class="w-full px-5 py-4 rounded-xl text-sm font-medium transition focus:ring-1 focus:ring-fuchsia-500">
+        <input type="password" id="sifre-input" placeholder="Şifre" class="w-full px-5 py-4 rounded-xl text-sm font-medium transition focus:ring-1 focus:ring-fuchsia-500">
+        <button id="giris-yap-btn" class="w-full bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-bold py-4 rounded-xl mt-4 shadow-[0_0_15px_rgba(217,70,239,0.3)] transition">Giriş Yap</button>
       </div>
       <p id="giris-hata-mesaji" class="mt-4 text-xs font-bold text-center text-red-400 hidden"></p>
     </div>
-    <div class="mt-12 space-y-2 text-center opacity-70">
-      <p class="text-[10px] text-zinc-500 font-medium tracking-wide">• Cihazınızın Konum (GPS) ayarlarının açık olduğundan emin olun.</p>
-      <p class="text-[10px] text-zinc-500 font-medium tracking-wide">• Tarayıcınızın konum erişimi iznini onaylamanız gerekmektedir.</p>
-      <p class="text-[10px] text-zinc-500 font-medium tracking-wide">• Teknik destek için IT veya İnsan Kaynakları ile iletişime geçiniz.</p>
+
+    <div class="mt-auto pt-8">
+      <div class="space-y-2 mb-8 px-2">
+        <p class="text-[11px] text-zinc-400 font-medium leading-relaxed tracking-wide flex items-start gap-2">
+          <span class="text-fuchsia-500 font-bold">•</span> Cihazınızın Konum (GPS) ayarlarının açık olduğundan emin olun.
+        </p>
+        <p class="text-[11px] text-zinc-400 font-medium leading-relaxed tracking-wide flex items-start gap-2">
+          <span class="text-fuchsia-500 font-bold">•</span> Tarayıcınızın konum erişimi iznine onay vermeniz gerekmektedir.
+        </p>
+        <p class="text-[11px] text-zinc-400 font-medium leading-relaxed tracking-wide flex items-start gap-2">
+          <span class="text-fuchsia-500 font-bold">•</span> Teknik destek için IT veya İnsan Kaynakları ile iletişime geçiniz.
+        </p>
+      </div>
+      <div class="text-center">
+        <a href="https://www.tailormadeprojects.com" target="_blank" class="text-fuchsia-500 text-xs font-bold tracking-widest hover:text-fuchsia-400 transition">www.tailormadeprojects.com</a>
+      </div>
     </div>
   </div>
 
   <div id="yoklama-ekrani" class="w-full max-w-sm hidden flex flex-col h-full">
     <div class="flex justify-between items-end mb-6">
-      <div><h2 class="text-xs text-zinc-400 uppercase tracking-wider mb-1">Hoş Geldin,</h2><h1 id="kullanici-bilgisi" class="text-2xl font-bold text-white leading-none">...</h1></div>
-      <button id="cikis-yap-btn" class="text-xs font-bold text-red-400 hover:text-red-300 bg-red-400/10 px-3 py-1.5 rounded-lg transition">Çıkış</button>
+      <div>
+        <h2 class="text-xs text-zinc-400 uppercase tracking-wider mb-1">Hoş Geldin,</h2>
+        <h1 id="kullanici-bilgisi" class="text-2xl font-bold text-white leading-none">...</h1>
+      </div>
+      <button id="cikis-yap-btn" class="text-xs font-bold text-red-400 hover:text-red-300 bg-red-400/10 px-4 py-2 rounded-xl transition">Çıkış</button>
     </div>
 
     <p id="mesaj-alani" class="text-sm text-center font-bold mb-4 hidden px-4 py-2 rounded-lg"></p>
 
     <div class="grid grid-cols-2 gap-4 mb-6">
-      <button onclick="yoklamaIslemi('İşe Giriş')" id="btn-ise-giris" class="app-btn bg-green-500/10 border border-green-500/30 text-green-400 hover:bg-green-500/20"><span class="btn-icon">🏭</span><span class="text-sm font-bold">İşe Giriş</span></button>
-      <button onclick="yoklamaIslemi('İşten Çıkış')" id="btn-isten-cikis" class="app-btn bg-orange-500/10 border border-orange-500/30 text-orange-400 hover:bg-orange-500/20 disabled"><span class="btn-icon">🏠</span><span class="text-sm font-bold">İşten Çıkış</span></button>
-      <button onclick="yoklamaIslemi('İzin Çıkışı')" id="btn-izin-cikis" class="app-btn bg-purple-500/10 border border-purple-500/30 text-purple-400 disabled relative"><span id="kilit-izin" class="absolute top-3 right-3 text-xs">🔒</span><span class="btn-icon">🚶</span><span class="text-sm font-bold">İzin Çıkışı</span></button>
-      <button onclick="yoklamaIslemi('İzin Dönüşü')" id="btn-izin-donus" class="app-btn bg-blue-500/10 border border-blue-500/30 text-blue-400 hover:bg-blue-500/20 disabled"><span class="btn-icon">🏢</span><span class="text-sm font-bold">İzin Dönüşü</span></button>
-      <button onclick="yoklamaIslemi('Görev Çıkışı')" id="btn-gorev-cikis" class="app-btn bg-teal-500/10 border border-teal-500/30 text-teal-400 disabled relative"><span id="kilit-gorev" class="absolute top-3 right-3 text-xs">🔒</span><span class="btn-icon">🚙</span><span class="text-sm font-bold">Görev Çıkış</span></button>
-      <button onclick="yoklamaIslemi('Görev Dönüşü')" id="btn-gorev-donus" class="app-btn bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20 disabled"><span class="btn-icon">🏭</span><span class="text-sm font-bold">Görev Dönüş</span></button>
+      <button onclick="yoklamaIslemi('İşe Giriş')" id="btn-ise-giris" class="app-btn bg-zinc-900 border border-zinc-700 text-zinc-300 hover:border-green-500 hover:text-green-400">
+        <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
+        <span class="text-sm font-bold tracking-wide">İşe Giriş</span>
+      </button>
+      <button onclick="yoklamaIslemi('İşten Çıkış')" id="btn-isten-cikis" class="app-btn bg-zinc-900 border border-zinc-700 text-zinc-300 hover:border-orange-500 hover:text-orange-400 disabled">
+        <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+        <span class="text-sm font-bold tracking-wide">İşten Çıkış</span>
+      </button>
+      
+      <button onclick="yoklamaIslemi('İzin Çıkışı')" id="btn-izin-cikis" class="app-btn bg-zinc-900 border border-zinc-700 text-zinc-300 hover:border-purple-500 hover:text-purple-400 disabled relative">
+        <svg id="kilit-izin" class="absolute top-4 right-4 w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+        <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span class="text-sm font-bold tracking-wide">İzin Çıkışı</span>
+      </button>
+      <button onclick="yoklamaIslemi('İzin Dönüşü')" id="btn-izin-donus" class="app-btn bg-zinc-900 border border-zinc-700 text-zinc-300 hover:border-blue-500 hover:text-blue-400 disabled">
+        <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+        <span class="text-sm font-bold tracking-wide">İzin Dönüşü</span>
+      </button>
+
+      <button onclick="yoklamaIslemi('Görev Çıkışı')" id="btn-gorev-cikis" class="app-btn bg-zinc-900 border border-zinc-700 text-zinc-300 hover:border-teal-500 hover:text-teal-400 disabled relative">
+        <svg id="kilit-gorev" class="absolute top-4 right-4 w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+        <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+        <span class="text-sm font-bold tracking-wide">Görev Çıkışı</span>
+      </button>
+      <button onclick="yoklamaIslemi('Görev Dönüşü')" id="btn-gorev-donus" class="app-btn bg-zinc-900 border border-zinc-700 text-zinc-300 hover:border-cyan-500 hover:text-cyan-400 disabled">
+        <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+        <span class="text-sm font-bold tracking-wide">Görev Dönüşü</span>
+      </button>
     </div>
 
-    <div class="glass-panel rounded-2xl p-4 flex-1 flex flex-col">
-      <div class="flex justify-between items-center mb-3 border-b border-zinc-800 pb-2"><h3 class="text-sm font-bold text-white">İzin Taleplerim</h3><button id="izin-menu-ac-btn" class="text-xs bg-blue-600 text-white font-bold px-3 py-1.5 rounded-lg">+ Yeni Talep</button></div>
-      <div id="taleplerim-listesi" class="space-y-2 overflow-y-auto flex-1"><div class="text-center text-zinc-500 text-xs py-4">Sistemde kaydınız bulunmuyor.</div></div>
+    <div class="glass-panel rounded-2xl p-5 flex-1 flex flex-col">
+      <div class="flex justify-between items-center mb-4 border-b border-zinc-800 pb-3">
+        <h3 class="text-sm font-bold text-white tracking-wide">İzin Taleplerim</h3>
+        <button id="izin-menu-ac-btn" class="text-xs bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-bold px-3 py-2 rounded-lg transition">+ Yeni Talep</button>
+      </div>
+      <div id="taleplerim-listesi" class="space-y-2 overflow-y-auto flex-1 pr-1">
+        <div class="text-center text-zinc-500 text-xs py-4">Sistemde kaydınız bulunmuyor.</div>
+      </div>
     </div>
   </div>
 
-  <div id="izin-ekrani" class="glass-panel p-6 rounded-3xl shadow-2xl w-11/12 max-w-sm hidden fixed z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-t-4 border-blue-500">
-    <div class="flex justify-between items-center mb-6 border-b border-zinc-800 pb-4"><h2 class="text-lg font-bold text-white">İzin Talep Formu</h2><button id="izin-kapat-btn" class="text-zinc-400 hover:text-white font-bold bg-zinc-800 rounded-full w-8 h-8 flex items-center justify-center">✕</button></div>
+  <div id="izin-ekrani" class="glass-panel p-6 rounded-3xl shadow-2xl w-11/12 max-w-sm hidden fixed z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-t-4 border-fuchsia-500">
+    <div class="flex justify-between items-center mb-6 border-b border-zinc-800 pb-4">
+      <h2 class="text-lg font-bold text-white tracking-wide">İzin Talep Formu</h2>
+      <button id="izin-kapat-btn" class="text-zinc-400 hover:text-white font-bold bg-zinc-800 rounded-full w-8 h-8 flex items-center justify-center transition">✕</button>
+    </div>
     <div class="space-y-4">
-      <div><label class="text-xs text-zinc-500 block mb-1">İzin Türü</label><select id="izin-turu" class="w-full p-3 rounded-xl text-sm font-bold text-white bg-zinc-900 border-zinc-700"><option value="Saatlik İzin">⏳ Saatlik (Özel İş)</option><option value="Görev İzni">🚙 Şirket Görevi (Dışarıda)</option><option value="Günlük İzin (Yıllık)">📅 Günlük (Yıllık İzin)</option><option value="Sağlık İzni">🏥 Sağlık / Hastane</option></select></div>
-      <div id="form-saatlik" class="space-y-3 p-3 bg-zinc-900/50 rounded-xl border border-zinc-800"><div><label class="text-xs text-zinc-500 block mb-1">Tarih</label><input type="date" id="saat-tarih" class="w-full p-2.5 rounded-lg text-sm"></div><div class="grid grid-cols-2 gap-2"><div><label class="text-xs text-zinc-500 block mb-1">Çıkış Saati</label><input type="time" id="saat-basla" class="w-full p-2.5 rounded-lg text-sm"></div><div><label class="text-xs text-zinc-500 block mb-1">Dönüş Saati</label><input type="time" id="saat-bitis" class="w-full p-2.5 rounded-lg text-sm"></div></div></div>
-      <div id="form-gunluk" class="space-y-3 hidden p-3 bg-zinc-900/50 rounded-xl border border-zinc-800"><div class="grid grid-cols-2 gap-2"><div><label class="text-xs text-zinc-500 block mb-1">Başlangıç</label><input type="date" id="gun-basla" class="w-full p-2.5 rounded-lg text-sm"></div><div><label class="text-xs text-zinc-500 block mb-1">Bitiş</label><input type="date" id="gun-bitis" class="w-full p-2.5 rounded-lg text-sm"></div></div></div>
-      <div id="form-rapor" class="hidden mt-2 p-3 bg-red-900/10 rounded-xl border border-red-500/20"><label class="text-xs text-red-400 block mb-2 font-bold">Rapor Durumu:</label><div class="flex gap-4 text-sm"><label class="flex items-center gap-2 cursor-pointer text-white"><input type="radio" name="rapor" value="Raporlu" checked class="accent-red-500"> Raporluyum</label><label class="flex items-center gap-2 cursor-pointer text-white"><input type="radio" name="rapor" value="Raporsuz" class="accent-red-500"> Raporsuz</label></div></div>
-      <div><label class="text-xs text-zinc-500 block mb-1">Açıklama / Sebep</label><textarea id="izin-sebep" rows="2" placeholder="Nedenini kısaca belirtin..." class="w-full p-3 rounded-xl text-sm resize-none"></textarea></div>
-      <button id="izin-gonder-btn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl mt-2 shadow-lg transition">Talebi Onaya Gönder</button>
+      <div>
+        <label class="text-xs text-zinc-500 block mb-1">İzin Türü</label>
+        <select id="izin-turu" class="w-full p-3 rounded-xl text-sm font-bold text-white bg-zinc-900 border-zinc-700">
+          <option value="Saatlik İzin">Saatlik (Özel İş)</option>
+          <option value="Görev İzni">Şirket Görevi (Dışarıda)</option>
+          <option value="Günlük İzin (Yıllık)">Günlük (Yıllık İzin)</option>
+          <option value="Sağlık İzni">Sağlık / Hastane</option>
+        </select>
+      </div>
+      
+      <div id="form-saatlik" class="space-y-3 p-3 bg-zinc-900/50 rounded-xl border border-zinc-800">
+        <div><label class="text-xs text-zinc-500 block mb-1">Tarih</label><input type="date" id="saat-tarih" class="w-full p-2.5 rounded-lg text-sm"></div>
+        <div class="grid grid-cols-2 gap-2">
+          <div><label class="text-xs text-zinc-500 block mb-1">Çıkış Saati</label><input type="time" id="saat-basla" class="w-full p-2.5 rounded-lg text-sm"></div>
+          <div><label class="text-xs text-zinc-500 block mb-1">Dönüş Saati</label><input type="time" id="saat-bitis" class="w-full p-2.5 rounded-lg text-sm"></div>
+        </div>
+      </div>
+
+      <div id="form-gunluk" class="space-y-3 hidden p-3 bg-zinc-900/50 rounded-xl border border-zinc-800">
+        <div class="grid grid-cols-2 gap-2">
+          <div><label class="text-xs text-zinc-500 block mb-1">Başlangıç</label><input type="date" id="gun-basla" class="w-full p-2.5 rounded-lg text-sm"></div>
+          <div><label class="text-xs text-zinc-500 block mb-1">Bitiş</label><input type="date" id="gun-bitis" class="w-full p-2.5 rounded-lg text-sm"></div>
+        </div>
+      </div>
+
+      <div id="form-rapor" class="hidden mt-2 p-3 bg-fuchsia-900/10 rounded-xl border border-fuchsia-500/20">
+        <label class="text-xs text-fuchsia-400 block mb-2 font-bold">Rapor Durumu:</label>
+        <div class="flex gap-4 text-sm">
+          <label class="flex items-center gap-2 cursor-pointer text-white"><input type="radio" name="rapor" value="Raporlu" checked class="accent-fuchsia-500"> Raporluyum</label>
+          <label class="flex items-center gap-2 cursor-pointer text-white"><input type="radio" name="rapor" value="Raporsuz" class="accent-fuchsia-500"> Raporsuz</label>
+        </div>
+      </div>
+
+      <div>
+        <label class="text-xs text-zinc-500 block mb-1">Açıklama / Sebep</label>
+        <textarea id="izin-sebep" rows="2" placeholder="Nedenini kısaca belirtin..." class="w-full p-3 rounded-xl text-sm resize-none"></textarea>
+      </div>
+      
+      <button id="izin-gonder-btn" class="w-full bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-bold py-4 rounded-xl mt-2 shadow-[0_0_15px_rgba(217,70,239,0.3)] transition">Talebi Onaya Gönder</button>
       <p id="izin-mesaj" class="text-xs text-center mt-2 hidden"></p>
     </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp, query, where, getDocs, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, serverTimestamp, query, where, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
     const app = initializeApp({ apiKey: "AIzaSyApUdfMEqxZDdj86j_U3h1u6Rj70blQeuM", authDomain: "tempo-personel.firebaseapp.com", projectId: "tempo-personel", storageBucket: "tempo-personel.firebasestorage.app", messagingSenderId: "799482514096", appId: "1:799482514096:web:d7bf38e355defe00e24975" });
     const db = getFirestore(app);
@@ -98,17 +178,33 @@
     }
     oturumKontrol();
 
+    // AKILLI APP BUTON MANTIĞI VE KİLİTLER
     function butonlariAyarla() {
       const bGiris = document.getElementById("btn-ise-giris"); const bCikis = document.getElementById("btn-isten-cikis"); const bIzCikis = document.getElementById("btn-izin-cikis"); const bIzDonus = document.getElementById("btn-izin-donus"); const bGrCikis = document.getElementById("btn-gorev-cikis"); const bGrDonus = document.getElementById("btn-gorev-donus");
-      [bGiris, bCikis, bIzCikis, bIzDonus, bGrCikis, bGrDonus].forEach(b => { b.classList.add("disabled"); b.classList.remove("hover:bg-purple-500/20", "hover:bg-teal-500/20", "cursor-pointer"); });
       
-      if (mevcutDurum === "İşten Çıkış" || mevcutDurum === undefined) { bGiris.classList.remove("disabled"); } 
+      [bGiris, bCikis, bIzCikis, bIzDonus, bGrCikis, bGrDonus].forEach(b => { 
+          b.classList.add("disabled"); 
+          b.classList.remove("border-purple-500", "text-purple-400", "border-teal-500", "text-teal-400"); // Kilitli renkleri sıfırla
+      });
+      
+      if (mevcutDurum === "İşten Çıkış" || mevcutDurum === undefined) { 
+          bGiris.classList.remove("disabled"); 
+      } 
       else if (mevcutDurum === "İşe Giriş" || mevcutDurum === "İzin Dönüşü" || mevcutDurum === "Görev Dönüşü") {
         bCikis.classList.remove("disabled");
-        if(bugunIzinliMi) { bIzCikis.classList.remove("disabled"); document.getElementById("kilit-izin").classList.add("hidden"); bIzCikis.classList.add("hover:bg-purple-500/20", "cursor-pointer"); } else { document.getElementById("kilit-izin").classList.remove("hidden"); }
-        if(bugunGorevliMi) { bGrCikis.classList.remove("disabled"); document.getElementById("kilit-gorev").classList.add("hidden"); bGrCikis.classList.add("hover:bg-teal-500/20", "cursor-pointer"); } else { document.getElementById("kilit-gorev").classList.remove("hidden"); }
+        
+        if(bugunIzinliMi) { 
+            bIzCikis.classList.remove("disabled"); document.getElementById("kilit-izin").classList.add("hidden"); 
+            bIzCikis.classList.add("border-purple-500", "text-purple-400"); 
+        } else { document.getElementById("kilit-izin").classList.remove("hidden"); }
+        
+        if(bugunGorevliMi) { 
+            bGrCikis.classList.remove("disabled"); document.getElementById("kilit-gorev").classList.add("hidden"); 
+            bGrCikis.classList.add("border-teal-500", "text-teal-400"); 
+        } else { document.getElementById("kilit-gorev").classList.remove("hidden"); }
       } 
-      else if (mevcutDurum === "İzin Çıkışı") { bIzDonus.classList.remove("disabled"); } else if (mevcutDurum === "Görev Çıkışı") { bGrDonus.classList.remove("disabled"); }
+      else if (mevcutDurum === "İzin Çıkışı") { bIzDonus.classList.remove("disabled"); } 
+      else if (mevcutDurum === "Görev Çıkışı") { bGrDonus.classList.remove("disabled"); }
     }
 
     function personelDinleyicisiBaslat(docId) {
@@ -123,7 +219,7 @@
       onSnapshot(query(collection(db, "izinTalepleri"), where("kullanici", "==", aktifKullanici.adSoyad)), (snapshot) => {
         const liste = document.getElementById("taleplerim-listesi"); liste.innerHTML = ""; bugunIzinliMi = false; bugunGorevliMi = false;
         const bugunStr = new Date().toISOString().split('T')[0];
-        if(snapshot.empty) { liste.innerHTML = `<div class="text-zinc-500 text-xs py-2 text-center">Talep bulunamadı.</div>`; butonlariAyarla(); return; }
+        if(snapshot.empty) { liste.innerHTML = `<div class="text-zinc-600 text-xs py-2 text-center">Talep bulunamadı.</div>`; butonlariAyarla(); return; }
         let talepler = []; snapshot.forEach(d => talepler.push(d.data())); talepler.sort((a,b) => (b.talepZamani?.seconds || 0) - (a.talepZamani?.seconds || 0));
         talepler.forEach(t => {
             let r = t.durum==="Onaylandı" ? "text-green-400 bg-green-500/10" : (t.durum==="Reddedildi" ? "text-red-400 bg-red-500/10" : "text-yellow-400 bg-yellow-500/10");
@@ -138,12 +234,12 @@
 
     document.getElementById("giris-yap-btn").addEventListener("click", async () => {
       const btn = document.getElementById("giris-yap-btn"); const k = document.getElementById("kadi-input").value.trim().toLowerCase(); const s = document.getElementById("sifre-input").value;
-      const h = document.getElementById("giris-hata-mesaji"); if(!k || !s) { h.innerText="Eksik bilgi!"; h.classList.remove("hidden"); return; }
-      btn.disabled=true; btn.innerText="Bekleyin...";
+      const h = document.getElementById("giris-hata-mesaji"); if(!k || !s) { h.innerText="Lütfen tüm bilgileri giriniz."; h.classList.remove("hidden"); return; }
+      btn.disabled=true; btn.innerText="Kontrol Ediliyor...";
       try {
         const snap = await getDocs(query(collection(db, "personeller"), where("kAdi", "==", k)));
         if(snap.empty) throw new Error("Kullanıcı bulunamadı!");
-        let bb=false; snap.forEach(d=>{ const p=d.data(); if(p.sifre===s){ if(!p.aktifMi)throw new Error("Hesabınız pasif!"); bb=true; aktifKullanici={docId:d.id, adSoyad:`${p.ad} ${p.soyad}`, kAdi:p.kAdi}; localStorage.setItem("tempoSession",JSON.stringify(aktifKullanici)); oturumKontrol(); } });
+        let bb=false; snap.forEach(d=>{ const p=d.data(); if(p.sifre===s){ if(!p.aktifMi)throw new Error("Hesabınız İK tarafından pasife alınmış."); bb=true; aktifKullanici={docId:d.id, adSoyad:`${p.ad} ${p.soyad}`, kAdi:p.kAdi}; localStorage.setItem("tempoSession",JSON.stringify(aktifKullanici)); oturumKontrol(); } });
         if(!bb) throw new Error("Şifre hatalı!");
       } catch(e) { h.innerText=e.message; h.classList.remove("hidden"); } btn.disabled=false; btn.innerText="Giriş Yap";
     });
@@ -151,16 +247,15 @@
 
     window.yoklamaIslemi = async (islemTuru) => {
       const msj = document.getElementById("mesaj-alani"); msj.className = "text-sm text-center font-bold mb-4 block text-blue-400 bg-blue-500/10"; msj.innerText = "Konum kontrol ediliyor...";
-      
       const kayitAt = async (durum, not = "Normal") => {
         try {
           await addDoc(collection(db, "yoklamalar"), { adSoyad: aktifKullanici.adSoyad, kullaniciAdi: aktifKullanici.kAdi, islemZamani: serverTimestamp(), durum: durum, sistemNotu: not });
           await updateDoc(doc(db, "personeller", aktifKullanici.docId), { sonDurum: durum });
           msj.className = "text-sm text-center font-bold mb-4 block text-green-400 bg-green-500/10"; msj.innerText = `${durum} Onaylandı!`; setTimeout(() => msj.classList.add("hidden"), 2000);
-        } catch (e) { msj.className = "text-sm text-center font-bold mb-4 block text-red-400 bg-red-500/10"; msj.innerText = "Hata!"; }
+        } catch (e) { msj.className = "text-sm text-center font-bold mb-4 block text-red-400 bg-red-500/10"; msj.innerText = "Veritabanı hatası!"; }
       };
 
-      if (!gpsZorunluMu) { kayitAt(islemTuru, "Evden Çalışma Modu"); } 
+      if (!gpsZorunluMu) { kayitAt(islemTuru, "Evden Çalışma Modu (GPS Kapalı)"); } 
       else {
         if ("geolocation" in navigator) {
           navigator.geolocation.getCurrentPosition((pos) => {
@@ -168,7 +263,7 @@
             const R = 6371e3; const a = Math.sin((pos.coords.latitude-F_LAT)*Math.PI/360)**2 + Math.cos(F_LAT*Math.PI/180)*Math.cos(pos.coords.latitude*Math.PI/180)*Math.sin((pos.coords.longitude-F_LON)*Math.PI/360)**2;
             if (R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))) <= K_METRE) kayitAt(islemTuru);
             else { msj.className = "text-sm text-center font-bold mb-4 block text-red-400 bg-red-500/10"; msj.innerText = "📍 Fabrika alanında değilsiniz!"; }
-          }, () => { msj.className = "text-sm text-center font-bold mb-4 block text-red-400 bg-red-500/10"; msj.innerText = "📍 Konum alınamadı! (Ayarları kontrol edin)"; });
+          }, () => { msj.className = "text-sm text-center font-bold mb-4 block text-red-400 bg-red-500/10"; msj.innerText = "📍 Konum alınamadı! Cihaz ayarlarını kontrol edin."; });
         }
       }
     };
@@ -188,19 +283,19 @@
       let tur = iTur.value; let sebep = document.getElementById("izin-sebep").value; let detayStr = "";
       if (tur.includes("Saatlik") || tur.includes("Görev")) {
         const trh = document.getElementById("saat-tarih").value; const bs = document.getElementById("saat-basla").value; const bt = document.getElementById("saat-bitis").value;
-        if(!trh||!bs||!bt){ msj.innerText="Eksik tarih/saat!"; msj.className="text-xs text-center mt-2 text-red-400 block"; return;}
+        if(!trh||!bs||!bt){ msj.innerText="Lütfen tarih ve saat bilgilerini giriniz."; msj.className="text-xs text-center mt-2 text-red-400 block"; return;}
         detayStr = `${trh} | ${bs} - ${bt}`;
       } else {
         const bs = document.getElementById("gun-basla").value; const bt = document.getElementById("gun-bitis").value;
-        if(!bs||!bt){ msj.innerText="Eksik tarih!"; msj.className="text-xs text-center mt-2 text-red-400 block"; return;}
+        if(!bs||!bt){ msj.innerText="Lütfen tarih aralığını seçiniz."; msj.className="text-xs text-center mt-2 text-red-400 block"; return;}
         detayStr = `${bs} ile ${bt}`;
         if(tur.includes("Sağlık")) detayStr += ` (${document.querySelector('input[name="rapor"]:checked').value})`;
       }
       btn.disabled=true; btn.innerText="Gönderiliyor...";
       try {
         await addDoc(collection(db, "izinTalepleri"), { kullanici: aktifKullanici.adSoyad, tur: tur, tarihDetay: detayStr, sebep: sebep, durum: "Onay Bekliyor", talepZamani: serverTimestamp() });
-        msj.innerText="İletildi!"; msj.className="text-xs text-center mt-2 text-green-400 block"; setTimeout(()=> {document.getElementById("izin-kapat-btn").click(); btn.disabled=false; btn.innerText="Talebi Onaya Gönder"; msj.classList.add("hidden"); }, 1500);
-      } catch(e) { btn.disabled=false; btn.innerText="Hata!"; }
+        msj.innerText="Talebiniz başarıyla iletildi!"; msj.className="text-xs text-center mt-2 text-fuchsia-400 block"; setTimeout(()=> {document.getElementById("izin-kapat-btn").click(); btn.disabled=false; btn.innerText="Talebi Onaya Gönder"; msj.classList.add("hidden"); }, 1500);
+      } catch(e) { btn.disabled=false; btn.innerText="Hata Oluştu!"; }
     });
   </script>
 </body>
