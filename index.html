@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tempo Team</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&family=Oswald:wght@600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Play', sans-serif; background-color: #09090b; color: #e4e4e7; overflow-x: hidden; }
+    body { font-family: 'Barlow Condensed', sans-serif; background-color: #09090b; color: #e4e4e7; overflow-x: hidden; }
     .glass-panel { background: rgba(24, 24, 27, 0.8); backdrop-filter: blur(16px); border: 1px solid rgba(63, 63, 70, 0.5); }
     input, select, textarea { background-color: #18181b; border: 1px solid #3f3f46; color: #f4f4f5; outline: none; }
     input:focus, select:focus, textarea:focus { border-color: #e6007e; }
@@ -15,7 +15,7 @@
     .app-btn { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; aspect-ratio: 1 / 1; border-radius: 1.25rem; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
     .app-btn:active { transform: scale(0.95); }
     .app-btn.disabled { opacity: 0.3; pointer-events: none; filter: grayscale(100%); }
-    .btn-icon { width: 36px; height: 36px; margin-bottom: 12px; }
+    .btn-icon { width: 36px; height: 36px; margin-bottom: 8px; }
   </style>
 </head>
 <body class="flex items-center justify-center min-h-screen w-full px-4 py-8 relative">
@@ -23,73 +23,72 @@
   <div id="giris-ekrani" class="glass-panel p-8 rounded-3xl shadow-2xl w-full max-w-sm flex flex-col justify-between min-h-[85vh]">
     <div>
       <div class="text-center mb-10 mt-4">
-        <h1 class="text-5xl tracking-wide text-white" style="font-family: 'Oswald', sans-serif;">TEMPO<span class="text-[#e6007e]">TEAM</span></h1>
-        <div class="h-0.5 w-16 bg-[#e6007e] mx-auto mt-3 opacity-50"></div>
+        <h1 class="text-6xl tracking-wide text-white"><span class="font-normal">Tempo</span><span class="text-[#e6007e] font-semibold">TEAM</span></h1>
+        <div class="h-0.5 w-20 bg-[#e6007e] mx-auto mt-2 opacity-50"></div>
       </div>
       <div class="space-y-4">
-        <input type="text" id="kadi-input" placeholder="Kullanıcı Adı" class="w-full px-5 py-4 rounded-xl text-sm font-medium transition focus:ring-1 focus:ring-[#e6007e]">
-        <input type="password" id="sifre-input" placeholder="Şifre" class="w-full px-5 py-4 rounded-xl text-sm font-medium transition focus:ring-1 focus:ring-[#e6007e]">
-        <button id="giris-yap-btn" class="w-full bg-[#e6007e] hover:bg-[#c4006b] text-white font-bold py-4 rounded-xl mt-4 shadow-[0_0_15px_rgba(230,0,126,0.3)] transition">Giriş Yap</button>
+        <input type="text" id="kadi-input" placeholder="Kullanıcı Adı" class="w-full px-5 py-4 rounded-xl text-lg font-normal transition focus:ring-1 focus:ring-[#e6007e]">
+        <input type="password" id="sifre-input" placeholder="Şifre" class="w-full px-5 py-4 rounded-xl text-lg font-normal transition focus:ring-1 focus:ring-[#e6007e]">
+        <button id="giris-yap-btn" class="w-full bg-[#e6007e] hover:bg-[#c4006b] text-white font-semibold text-xl py-4 rounded-xl mt-4 shadow-[0_0_15px_rgba(230,0,126,0.3)] transition">Giriş Yap</button>
       </div>
-      <p id="giris-hata-mesaji" class="mt-4 text-xs font-bold text-center text-red-400 hidden"></p>
+      <p id="giris-hata-mesaji" class="mt-4 text-sm font-semibold text-center text-red-400 hidden"></p>
     </div>
 
     <div class="mt-auto pt-8">
       <div class="space-y-2 mb-8 px-2">
-        <p class="text-[11px] text-zinc-400 font-medium leading-relaxed tracking-wide flex items-start gap-2"><span class="text-[#e6007e] font-bold">•</span> Cihazınızın Konum (GPS) ayarlarının açık olduğundan emin olun.</p>
-        <p class="text-[11px] text-zinc-400 font-medium leading-relaxed tracking-wide flex items-start gap-2"><span class="text-[#e6007e] font-bold">•</span> Tarayıcınızın konum erişimi iznine onay vermeniz gerekmektedir.</p>
-        <p class="text-[11px] text-zinc-400 font-medium leading-relaxed tracking-wide flex items-start gap-2"><span class="text-[#e6007e] font-bold">•</span> Teknik destek için IT veya İnsan Kaynakları ile iletişime geçiniz.</p>
+        <p class="text-[13px] text-zinc-400 font-light leading-relaxed tracking-wide flex items-start gap-2"><span class="text-[#e6007e] font-bold">•</span> Cihazınızın Konum (GPS) ayarlarının açık olduğundan emin olun.</p>
+        <p class="text-[13px] text-zinc-400 font-light leading-relaxed tracking-wide flex items-start gap-2"><span class="text-[#e6007e] font-bold">•</span> Tarayıcınızın konum erişimi iznine onay vermeniz gerekmektedir.</p>
+        <p class="text-[13px] text-zinc-400 font-light leading-relaxed tracking-wide flex items-start gap-2"><span class="text-[#e6007e] font-bold">•</span> Teknik destek için IT veya İnsan Kaynakları ile iletişime geçiniz.</p>
       </div>
       <div class="text-center">
-        <a href="https://www.tailormadeprojects.com" target="_blank" class="text-[#e6007e] text-xs font-bold tracking-widest hover:text-[#c4006b] transition">www.tailormadeprojects.com</a>
+        <a href="https://www.tailormadeprojects.com" target="_blank" class="text-[#e6007e] text-sm font-medium tracking-widest hover:text-[#c4006b] transition">www.tailormadeprojects.com</a>
       </div>
     </div>
   </div>
 
   <div id="yoklama-ekrani" class="w-full max-w-sm hidden flex flex-col h-full">
     <div class="flex justify-between items-end mb-6">
-      <div><h2 class="text-xs text-zinc-400 uppercase tracking-wider mb-1">Hoş Geldin,</h2><h1 id="kullanici-bilgisi" class="text-2xl font-bold text-white leading-none">...</h1></div>
-      <button id="cikis-yap-btn" class="text-xs font-bold text-red-400 hover:text-red-300 bg-red-400/10 px-4 py-2 rounded-xl transition">Çıkış</button>
+      <div><h2 class="text-sm text-zinc-400 uppercase tracking-widest font-medium mb-1">Hoş Geldin,</h2><h1 id="kullanici-bilgisi" class="text-3xl font-bold text-white leading-none">...</h1></div>
+      <button id="cikis-yap-btn" class="text-sm font-semibold text-red-400 hover:text-red-300 bg-red-400/10 px-4 py-2 rounded-xl transition">Çıkış</button>
     </div>
 
-    <p id="mesaj-alani" class="text-sm text-center font-bold mb-4 hidden px-4 py-2 rounded-lg"></p>
+    <p id="mesaj-alani" class="text-base text-center font-semibold mb-4 hidden px-4 py-2 rounded-lg"></p>
 
     <div class="grid grid-cols-2 gap-4 mb-6">
-      <button onclick="yoklamaIslemi('İşe Giriş')" id="btn-ise-giris" class="app-btn bg-zinc-900 border border-zinc-700 text-zinc-300 hover:border-green-500 hover:text-green-400"><svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg><span class="text-sm font-bold tracking-wide">İşe Giriş</span></button>
-      <button onclick="yoklamaIslemi('İşten Çıkış')" id="btn-isten-cikis" class="app-btn bg-zinc-900 border border-zinc-700 text-zinc-300 hover:border-orange-500 hover:text-orange-400 disabled"><svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg><span class="text-sm font-bold tracking-wide">İşten Çıkış</span></button>
+      <button onclick="yoklamaIslemi('İşe Giriş')" id="btn-ise-giris" class="app-btn bg-zinc-900 border border-zinc-700 text-zinc-300 hover:border-green-500 hover:text-green-400"><svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg><span class="text-lg font-semibold tracking-wide">İşe Giriş</span></button>
+      <button onclick="yoklamaIslemi('İşten Çıkış')" id="btn-isten-cikis" class="app-btn bg-zinc-900 border border-zinc-700 text-zinc-300 hover:border-orange-500 hover:text-orange-400 disabled"><svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg><span class="text-lg font-semibold tracking-wide">İşten Çıkış</span></button>
       
-      <button onclick="yoklamaIslemi('İzin Çıkışı')" id="btn-izin-cikis" class="app-btn bg-zinc-900 border border-zinc-700 text-zinc-300 hover:border-[#e6007e] hover:text-[#e6007e] disabled relative"><svg id="kilit-izin" class="absolute top-4 right-4 w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg><svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><span class="text-sm font-bold tracking-wide">İzin Çıkışı</span></button>
-      <button onclick="yoklamaIslemi('İzin Dönüşü')" id="btn-izin-donus" class="app-btn bg-zinc-900 border border-zinc-700 text-zinc-300 hover:border-blue-500 hover:text-blue-400 disabled"><svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg><span class="text-sm font-bold tracking-wide">İzin Dönüşü</span></button>
+      <button onclick="yoklamaIslemi('İzin Çıkışı')" id="btn-izin-cikis" class="app-btn bg-zinc-900 border border-zinc-700 text-zinc-300 hover:border-[#e6007e] hover:text-[#e6007e] disabled relative"><svg id="kilit-izin" class="absolute top-4 right-4 w-5 h-5 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg><svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><span class="text-lg font-semibold tracking-wide">İzin Çıkışı</span></button>
+      <button onclick="yoklamaIslemi('İzin Dönüşü')" id="btn-izin-donus" class="app-btn bg-zinc-900 border border-zinc-700 text-zinc-300 hover:border-blue-500 hover:text-blue-400 disabled"><svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg><span class="text-lg font-semibold tracking-wide">İzin Dönüşü</span></button>
 
-      <button onclick="yoklamaIslemi('Görev Çıkışı')" id="btn-gorev-cikis" class="app-btn bg-zinc-900 border border-zinc-700 text-zinc-300 hover:border-teal-500 hover:text-teal-400 disabled relative"><svg id="kilit-gorev" class="absolute top-4 right-4 w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg><svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg><span class="text-sm font-bold tracking-wide">Görev Çıkışı</span></button>
-      <button onclick="yoklamaIslemi('Görev Dönüşü')" id="btn-gorev-donus" class="app-btn bg-zinc-900 border border-zinc-700 text-zinc-300 hover:border-cyan-500 hover:text-cyan-400 disabled"><svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg><span class="text-sm font-bold tracking-wide">Görev Dönüşü</span></button>
+      <button onclick="yoklamaIslemi('Görev Çıkışı')" id="btn-gorev-cikis" class="app-btn bg-zinc-900 border border-zinc-700 text-zinc-300 hover:border-teal-500 hover:text-teal-400 disabled relative"><svg id="kilit-gorev" class="absolute top-4 right-4 w-5 h-5 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg><svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg><span class="text-lg font-semibold tracking-wide">Görev Çıkışı</span></button>
+      <button onclick="yoklamaIslemi('Görev Dönüşü')" id="btn-gorev-donus" class="app-btn bg-zinc-900 border border-zinc-700 text-zinc-300 hover:border-cyan-500 hover:text-cyan-400 disabled"><svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg><span class="text-lg font-semibold tracking-wide">Görev Dönüşü</span></button>
     </div>
 
     <div class="glass-panel rounded-2xl p-5 flex-1 flex flex-col">
       <div class="flex justify-between items-center mb-4 border-b border-zinc-800 pb-3">
-        <h3 class="text-sm font-bold text-white tracking-wide">İzin Taleplerim</h3>
-        <button id="izin-menu-ac-btn" class="text-xs bg-[#e6007e] hover:bg-[#c4006b] text-white font-bold px-3 py-2 rounded-lg transition">+ Yeni Talep</button>
+        <h3 class="text-lg font-bold text-white tracking-wide">İzin Taleplerim</h3>
+        <button id="izin-menu-ac-btn" class="text-sm bg-[#e6007e] hover:bg-[#c4006b] text-white font-semibold px-4 py-2 rounded-lg transition">+ Yeni Talep</button>
       </div>
       <div id="taleplerim-listesi" class="space-y-2 overflow-y-auto flex-1 pr-1"></div>
     </div>
   </div>
 
   <div id="izin-ekrani" class="glass-panel p-6 rounded-3xl shadow-2xl w-11/12 max-w-sm hidden fixed z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-t-4 border-[#e6007e]">
-    <div class="flex justify-between items-center mb-6 border-b border-zinc-800 pb-4"><h2 class="text-lg font-bold text-white tracking-wide">İzin Talep Formu</h2><button id="izin-kapat-btn" class="text-zinc-400 hover:text-white font-bold bg-zinc-800 rounded-full w-8 h-8 flex items-center justify-center transition">✕</button></div>
+    <div class="flex justify-between items-center mb-6 border-b border-zinc-800 pb-4"><h2 class="text-2xl font-bold text-white tracking-wide">İzin Talep Formu</h2><button id="izin-kapat-btn" class="text-zinc-400 hover:text-white font-bold bg-zinc-800 rounded-full w-8 h-8 flex items-center justify-center transition">✕</button></div>
     <div class="space-y-4">
-      <div><label class="text-xs text-zinc-500 block mb-1">İzin Türü</label><select id="izin-turu" class="w-full p-3 rounded-xl text-sm font-bold text-white bg-zinc-900 border-zinc-700"><option value="Saatlik İzin">Saatlik (Özel İş)</option><option value="Görev İzni">Şirket Görevi (Dışarıda)</option><option value="Günlük İzin (Yıllık)">Günlük (Yıllık İzin)</option><option value="Sağlık İzni">Sağlık / Hastane</option></select></div>
-      <div id="form-saatlik" class="space-y-3 p-3 bg-zinc-900/50 rounded-xl border border-zinc-800"><div><label class="text-xs text-zinc-500 block mb-1">Tarih</label><input type="date" id="saat-tarih" class="w-full p-2.5 rounded-lg text-sm"></div><div class="grid grid-cols-2 gap-2"><div><label class="text-xs text-zinc-500 block mb-1">Çıkış Saati</label><input type="time" id="saat-basla" class="w-full p-2.5 rounded-lg text-sm"></div><div><label class="text-xs text-zinc-500 block mb-1">Dönüş Saati</label><input type="time" id="saat-bitis" class="w-full p-2.5 rounded-lg text-sm"></div></div></div>
-      <div id="form-gunluk" class="space-y-3 hidden p-3 bg-zinc-900/50 rounded-xl border border-zinc-800"><div class="grid grid-cols-2 gap-2"><div><label class="text-xs text-zinc-500 block mb-1">Başlangıç</label><input type="date" id="gun-basla" class="w-full p-2.5 rounded-lg text-sm"></div><div><label class="text-xs text-zinc-500 block mb-1">Bitiş</label><input type="date" id="gun-bitis" class="w-full p-2.5 rounded-lg text-sm"></div></div></div>
-      <div id="form-rapor" class="hidden mt-2 p-3 bg-pink-900/10 rounded-xl border border-pink-500/20"><label class="text-xs text-pink-400 block mb-2 font-bold">Rapor Durumu:</label><div class="flex gap-4 text-sm"><label class="flex items-center gap-2 cursor-pointer text-white"><input type="radio" name="rapor" value="Raporlu" checked class="accent-[#e6007e]"> Raporluyum</label><label class="flex items-center gap-2 cursor-pointer text-white"><input type="radio" name="rapor" value="Raporsuz" class="accent-[#e6007e]"> Raporsuz</label></div></div>
-      <div><label class="text-xs text-zinc-500 block mb-1">Açıklama / Sebep</label><textarea id="izin-sebep" rows="2" placeholder="Nedenini kısaca belirtin..." class="w-full p-3 rounded-xl text-sm resize-none"></textarea></div>
-      <button id="izin-gonder-btn" class="w-full bg-[#e6007e] hover:bg-[#c4006b] text-white font-bold py-4 rounded-xl mt-2 shadow-[0_0_15px_rgba(230,0,126,0.3)] transition">Talebi Onaya Gönder</button>
-      <p id="izin-mesaj" class="text-xs text-center mt-2 hidden"></p>
+      <div><label class="text-sm text-zinc-500 font-medium block mb-1">İzin Türü</label><select id="izin-turu" class="w-full p-3 rounded-xl text-lg font-medium text-white bg-zinc-900 border-zinc-700"><option value="Saatlik İzin">Saatlik (Özel İş)</option><option value="Görev İzni">Şirket Görevi (Dışarıda)</option><option value="Günlük İzin (Yıllık)">Günlük (Yıllık İzin)</option><option value="Sağlık İzni">Sağlık / Hastane</option></select></div>
+      <div id="form-saatlik" class="space-y-3 p-3 bg-zinc-900/50 rounded-xl border border-zinc-800"><div><label class="text-sm text-zinc-500 font-medium block mb-1">Tarih</label><input type="date" id="saat-tarih" class="w-full p-2.5 rounded-lg text-lg font-normal"></div><div class="grid grid-cols-2 gap-2"><div><label class="text-sm text-zinc-500 font-medium block mb-1">Çıkış Saati</label><input type="time" id="saat-basla" class="w-full p-2.5 rounded-lg text-lg font-normal"></div><div><label class="text-sm text-zinc-500 font-medium block mb-1">Dönüş Saati</label><input type="time" id="saat-bitis" class="w-full p-2.5 rounded-lg text-lg font-normal"></div></div></div>
+      <div id="form-gunluk" class="space-y-3 hidden p-3 bg-zinc-900/50 rounded-xl border border-zinc-800"><div class="grid grid-cols-2 gap-2"><div><label class="text-sm text-zinc-500 font-medium block mb-1">Başlangıç</label><input type="date" id="gun-basla" class="w-full p-2.5 rounded-lg text-lg font-normal"></div><div><label class="text-sm text-zinc-500 font-medium block mb-1">Bitiş</label><input type="date" id="gun-bitis" class="w-full p-2.5 rounded-lg text-lg font-normal"></div></div></div>
+      <div id="form-rapor" class="hidden mt-2 p-3 bg-pink-900/10 rounded-xl border border-pink-500/20"><label class="text-sm text-pink-400 block mb-2 font-semibold">Rapor Durumu:</label><div class="flex gap-4 text-base"><label class="flex items-center gap-2 cursor-pointer text-white font-medium"><input type="radio" name="rapor" value="Raporlu" checked class="accent-[#e6007e]"> Raporluyum</label><label class="flex items-center gap-2 cursor-pointer text-white font-medium"><input type="radio" name="rapor" value="Raporsuz" class="accent-[#e6007e]"> Raporsuz</label></div></div>
+      <div><label class="text-sm text-zinc-500 font-medium block mb-1">Açıklama / Sebep</label><textarea id="izin-sebep" rows="2" placeholder="Nedenini kısaca belirtin..." class="w-full p-3 rounded-xl text-base font-normal resize-none"></textarea></div>
+      <button id="izin-gonder-btn" class="w-full bg-[#e6007e] hover:bg-[#c4006b] text-white font-semibold text-lg py-4 rounded-xl mt-2 shadow-[0_0_15px_rgba(230,0,126,0.3)] transition">Talebi Onaya Gönder</button>
+      <p id="izin-mesaj" class="text-sm text-center font-medium mt-2 hidden"></p>
     </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-    // getDocs EKLENDİ! Artık giriş hatası vermeyecek.
     import { getFirestore, collection, addDoc, serverTimestamp, query, where, getDocs, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
     const app = initializeApp({ apiKey: "AIzaSyApUdfMEqxZDdj86j_U3h1u6Rj70blQeuM", authDomain: "tempo-personel.firebaseapp.com", projectId: "tempo-personel", storageBucket: "tempo-personel.firebasestorage.app", messagingSenderId: "799482514096", appId: "1:799482514096:web:d7bf38e355defe00e24975" });
@@ -140,11 +139,11 @@
       onSnapshot(query(collection(db, "izinTalepleri"), where("kullanici", "==", aktifKullanici.adSoyad)), (snapshot) => {
         const liste = document.getElementById("taleplerim-listesi"); liste.innerHTML = ""; bugunIzinliMi = false; bugunGorevliMi = false;
         const bugunStr = new Date().toISOString().split('T')[0];
-        if(snapshot.empty) { liste.innerHTML = `<div class="text-zinc-600 text-xs py-2 text-center">Talep bulunamadı.</div>`; butonlariAyarla(); return; }
+        if(snapshot.empty) { liste.innerHTML = `<div class="text-zinc-600 text-sm py-2 text-center font-medium">Talep bulunamadı.</div>`; butonlariAyarla(); return; }
         let talepler = []; snapshot.forEach(d => talepler.push(d.data())); talepler.sort((a,b) => (b.talepZamani?.seconds || 0) - (a.talepZamani?.seconds || 0));
         talepler.forEach(t => {
             let r = t.durum==="Onaylandı" ? "text-green-400 bg-green-500/10" : (t.durum==="Reddedildi" ? "text-red-400 bg-red-500/10" : "text-yellow-400 bg-yellow-500/10");
-            liste.innerHTML += `<div class="bg-zinc-900/50 p-3 rounded-xl mb-2 border border-zinc-800 flex justify-between items-center"><div class="flex flex-col"><span class="text-white font-bold text-xs">${t.tur}</span><span class="text-zinc-500 text-[10px] mt-0.5">${t.tarihDetay}</span></div><div class="px-2 py-1 rounded-md text-[10px] font-bold ${r}">${t.durum}</div></div>`;
+            liste.innerHTML += `<div class="bg-zinc-900/50 p-3 rounded-xl mb-2 border border-zinc-800 flex justify-between items-center"><div class="flex flex-col"><span class="text-white font-semibold text-base">${t.tur}</span><span class="text-zinc-500 text-xs mt-0.5 font-medium">${t.tarihDetay}</span></div><div class="px-2 py-1 rounded-md text-xs font-bold ${r}">${t.durum}</div></div>`;
             if(t.durum === "Onaylandı" && t.tarihDetay.includes(bugunStr)) {
                 if(t.tur === "Saatlik İzin" || t.tur === "Sağlık İzni" || t.tur === "Günlük İzin (Yıllık)") bugunIzinliMi = true;
                 if(t.tur === "Görev İzni") bugunGorevliMi = true;
@@ -167,13 +166,13 @@
     document.getElementById("cikis-yap-btn").addEventListener("click", () => { localStorage.removeItem("tempoSession"); window.location.reload(); });
 
     window.yoklamaIslemi = async (islemTuru) => {
-      const msj = document.getElementById("mesaj-alani"); msj.className = "text-sm text-center font-bold mb-4 block text-blue-400 bg-blue-500/10"; msj.innerText = "Konum kontrol ediliyor...";
+      const msj = document.getElementById("mesaj-alani"); msj.className = "text-base text-center font-semibold mb-4 block text-blue-400 bg-blue-500/10"; msj.innerText = "Konum kontrol ediliyor...";
       const kayitAt = async (durum, not = "Normal") => {
         try {
           await addDoc(collection(db, "yoklamalar"), { adSoyad: aktifKullanici.adSoyad, kullaniciAdi: aktifKullanici.kAdi, islemZamani: serverTimestamp(), durum: durum, sistemNotu: not });
           await updateDoc(doc(db, "personeller", aktifKullanici.docId), { sonDurum: durum });
-          msj.className = "text-sm text-center font-bold mb-4 block text-green-400 bg-green-500/10"; msj.innerText = `${durum} Onaylandı!`; setTimeout(() => msj.classList.add("hidden"), 2000);
-        } catch (e) { msj.className = "text-sm text-center font-bold mb-4 block text-red-400 bg-red-500/10"; msj.innerText = "Hata oluştu!"; }
+          msj.className = "text-base text-center font-semibold mb-4 block text-green-400 bg-green-500/10"; msj.innerText = `${durum} Onaylandı!`; setTimeout(() => msj.classList.add("hidden"), 2000);
+        } catch (e) { msj.className = "text-base text-center font-semibold mb-4 block text-red-400 bg-red-500/10"; msj.innerText = "Hata oluştu!"; }
       };
 
       if (!gpsZorunluMu) { kayitAt(islemTuru, "Evden Çalışma Modu (GPS Kapalı)"); } 
@@ -183,8 +182,8 @@
             const F_LAT = 38.4237; const F_LON = 27.1428; const K_METRE = 50000;
             const R = 6371e3; const a = Math.sin((pos.coords.latitude-F_LAT)*Math.PI/360)**2 + Math.cos(F_LAT*Math.PI/180)*Math.cos(pos.coords.latitude*Math.PI/180)*Math.sin((pos.coords.longitude-F_LON)*Math.PI/360)**2;
             if (R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))) <= K_METRE) kayitAt(islemTuru);
-            else { msj.className = "text-sm text-center font-bold mb-4 block text-red-400 bg-red-500/10"; msj.innerText = "📍 Fabrika alanında değilsiniz!"; }
-          }, () => { msj.className = "text-sm text-center font-bold mb-4 block text-red-400 bg-red-500/10"; msj.innerText = "📍 Konum alınamadı!"; });
+            else { msj.className = "text-base text-center font-semibold mb-4 block text-red-400 bg-red-500/10"; msj.innerText = "📍 Fabrika alanında değilsiniz!"; }
+          }, () => { msj.className = "text-base text-center font-semibold mb-4 block text-red-400 bg-red-500/10"; msj.innerText = "📍 Konum alınamadı!"; });
         }
       }
     };
@@ -204,18 +203,18 @@
       let tur = iTur.value; let sebep = document.getElementById("izin-sebep").value; let detayStr = "";
       if (tur.includes("Saatlik") || tur.includes("Görev")) {
         const trh = document.getElementById("saat-tarih").value; const bs = document.getElementById("saat-basla").value; const bt = document.getElementById("saat-bitis").value;
-        if(!trh||!bs||!bt){ msj.innerText="Tarih/saat giriniz."; msj.className="text-xs text-center mt-2 text-red-400 block"; return;}
+        if(!trh||!bs||!bt){ msj.innerText="Tarih/saat giriniz."; msj.className="text-sm text-center font-medium mt-2 text-red-400 block"; return;}
         detayStr = `${trh} | ${bs} - ${bt}`;
       } else {
         const bs = document.getElementById("gun-basla").value; const bt = document.getElementById("gun-bitis").value;
-        if(!bs||!bt){ msj.innerText="Tarih aralığı seçiniz."; msj.className="text-xs text-center mt-2 text-red-400 block"; return;}
+        if(!bs||!bt){ msj.innerText="Tarih aralığı seçiniz."; msj.className="text-sm text-center font-medium mt-2 text-red-400 block"; return;}
         detayStr = `${bs} ile ${bt}`;
         if(tur.includes("Sağlık")) detayStr += ` (${document.querySelector('input[name="rapor"]:checked').value})`;
       }
       btn.disabled=true; btn.innerText="Gönderiliyor...";
       try {
         await addDoc(collection(db, "izinTalepleri"), { kullanici: aktifKullanici.adSoyad, tur: tur, tarihDetay: detayStr, sebep: sebep, durum: "Onay Bekliyor", talepZamani: serverTimestamp() });
-        msj.innerText="Başarıyla iletildi!"; msj.className="text-xs text-center mt-2 text-[#e6007e] block"; setTimeout(()=> {document.getElementById("izin-kapat-btn").click(); btn.disabled=false; btn.innerText="Talebi Onaya Gönder"; msj.classList.add("hidden"); }, 1500);
+        msj.innerText="Başarıyla iletildi!"; msj.className="text-sm font-semibold text-center mt-2 text-[#e6007e] block"; setTimeout(()=> {document.getElementById("izin-kapat-btn").click(); btn.disabled=false; btn.innerText="Talebi Onaya Gönder"; msj.classList.add("hidden"); }, 1500);
       } catch(e) { btn.disabled=false; btn.innerText="Hata!"; }
     });
   </script>
