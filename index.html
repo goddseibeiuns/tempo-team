@@ -157,7 +157,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp, query, where, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, serverTimestamp, query, where, getDocs, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
     const app = initializeApp({ apiKey: "AIzaSyApUdfMEqxZDdj86j_U3h1u6Rj70blQeuM", authDomain: "tempo-personel.firebaseapp.com", projectId: "tempo-personel", storageBucket: "tempo-personel.firebasestorage.app", messagingSenderId: "799482514096", appId: "1:799482514096:web:d7bf38e355defe00e24975" });
     const db = getFirestore(app);
@@ -300,3 +300,4 @@
   </script>
 </body>
 </html>
+
