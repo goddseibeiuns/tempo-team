@@ -527,7 +527,6 @@
                 const currentD = new Date(yil, ay, i);
                 const dateStr = currentD.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' });
                 
-                // Formatted for finding Firebase leave requests like "2026-03-18"
                 const isoYYYY = currentD.getFullYear();
                 const isoMM = String(currentD.getMonth() + 1).padStart(2, '0');
                 const isoDD = String(currentD.getDate()).padStart(2, '0');
@@ -584,7 +583,6 @@
                                 if(d) izinDk += (d - c) / 60000;
                             }
                             
-                            // İzin Türünü Firebase'den bul
                             let gunlukIzinKesintiTuru = "Ücret Kesintisi Olacak"; // Varsayılan
                             const bugununIzni = tumOnayliIzinlerListesi.find(iz => iz.tarihDetay && (iz.tarihDetay.includes(isoTarih) || iz.tarihDetay.includes(dateStr)));
                             if(bugununIzni && bugununIzni.kesintiTuru) { gunlukIzinKesintiTuru = bugununIzni.kesintiTuru; }
@@ -646,7 +644,10 @@
             
             document.getElementById("tablo-govdesi").innerHTML = raporTablo;
             
-            // SAATLİK İZİN ÖZETİ EKRANA BASMA
+            // SAATLİK İZİN ÖZETİ EKRANA BASMA VE EXCEL İÇİN GLOBAL DEĞİŞKENLERE ATAMA
+            window.suAnkiKesintiliIzin = kesintiliIzinDkToplam;
+            window.suAnkiKesintisizIzin = kesintisizIzinDkToplam;
+
             let ozetHTML = "";
             if(kesintiliIzinDkToplam > 0 || kesintisizIzinDkToplam > 0) {
                 ozetHTML += `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">`;
@@ -705,6 +706,7 @@
         }
     });
 
+    // GÜNCELLENEN EXCEL İNDİRME FONKSİYONU
     document.getElementById("excel-indir-btn").addEventListener("click", async () => {
         if(!window.suAnkiExcelData || window.suAnkiExcelData.length === 0) return alert("İndirilecek veri yok.");
         
@@ -712,7 +714,7 @@
         const worksheet = workbook.addWorksheet('Puantaj');
         
         worksheet.columns = [
-            { header: 'Tarih', key: 'Tarih', width: 15 },
+            { header: 'Tarih', key: 'Tarih', width: 35 },
             { header: 'Durum', key: 'Durum', width: 35 },
             { header: 'Giriş Saati', key: 'Giriş Saati', width: 15 },
             { header: 'Çıkış Saati', key: 'Çıkış Saati', width: 15 },
@@ -743,6 +745,27 @@
         });
         totalRow.font = { bold: true };
         totalRow.fill = { type: 'pattern', pattern:'solid', fgColor:{ argb:'FFFFFF00' } };
+
+        // SAATLİK İZİN ÖZETLERİNİ EXCEL'E EKLEME
+        if(window.suAnkiKesintiliIzin > 0 || window.suAnkiKesintisizIzin > 0) {
+            worksheet.addRow({}); // Boşluk satırı
+            
+            if(window.suAnkiKesintiliIzin > 0) {
+                const r1 = worksheet.addRow({ 'Tarih': 'Ücret Kesintisi OLACAK İzin Toplamı:', 'Durum': dakikaCevir(window.suAnkiKesintiliIzin) });
+                r1.font = { bold: true, color: { argb: 'FFFF0000' } }; // Kırmızımsı yazı
+            }
+            
+            if(window.suAnkiKesintisizIzin > 0) {
+                const r2 = worksheet.addRow({ 'Tarih': 'Ücret Kesintisi OLMAYACAK İzin Toplamı:', 'Durum': dakikaCevir(window.suAnkiKesintisizIzin) });
+                r2.font = { bold: true, color: { argb: 'FF0070C0' } }; // Mavimsi yazı
+                
+                let kesintiGun = Math.floor(window.suAnkiKesintisizIzin / 600);
+                if (kesintiGun > 0) {
+                    const r3 = worksheet.addRow({ 'Tarih': 'DİKKAT:', 'Durum': `Toplam süre 10 saati geçti. ${kesintiGun} günlük kesinti olacak mı?` });
+                    r3.font = { bold: true, color: { argb: 'FFFFC000' } }; // Turuncu uyarı
+                }
+            }
+        }
         
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
