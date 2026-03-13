@@ -23,7 +23,8 @@
   <div id="giris-ekrani" class="glass-panel p-8 rounded-3xl shadow-2xl w-full max-w-sm flex flex-col justify-between min-h-[85vh]">
     <div>
       <div class="text-center mb-10 mt-4">
-      <img src="logo.png" alt="Tempo Team Logo" class="w-70 mx-auto drop-shadow-[0_0_15px_rgba(230,0,126,0.2)]">
+        <img src="logo.png" alt="Tempo Team Logo" class="w-48 mx-auto drop-shadow-[0_0_15px_rgba(230,0,126,0.2)]">
+        <div class="h-0.5 w-20 bg-[#e6007e] mx-auto mt-4 opacity-50"></div>
       </div>
       <div class="space-y-4">
         <input type="text" id="kadi-input" placeholder="Kullanıcı Adı" class="w-full px-5 py-4 rounded-xl text-lg font-normal transition focus:ring-1 focus:ring-[#e6007e]">
@@ -77,7 +78,14 @@
     <div class="flex justify-between items-center mb-6 border-b border-zinc-800 pb-4"><h2 class="text-2xl font-bold text-white tracking-wide">İzin Talep Formu</h2><button id="izin-kapat-btn" class="text-zinc-400 hover:text-white font-bold bg-zinc-800 rounded-full w-8 h-8 flex items-center justify-center transition">✕</button></div>
     <div class="space-y-4">
       <div><label class="text-sm text-zinc-500 font-medium block mb-1">İzin Türü</label><select id="izin-turu" class="w-full p-3 rounded-xl text-lg font-medium text-white bg-zinc-900 border-zinc-700"><option value="Saatlik İzin">Saatlik (Özel İş)</option><option value="Görev İzni">Şirket Görevi (Dışarıda)</option><option value="Günlük İzin (Yıllık)">Günlük (Yıllık İzin)</option><option value="Sağlık İzni">Sağlık / Hastane</option></select></div>
-      <div id="form-saatlik" class="space-y-3 p-3 bg-zinc-900/50 rounded-xl border border-zinc-800"><div><label class="text-sm text-zinc-500 font-medium block mb-1">Tarih</label><input type="date" id="saat-tarih" class="w-full p-2.5 rounded-lg text-lg font-normal"></div><div class="grid grid-cols-2 gap-2"><div><label class="text-sm text-zinc-500 font-medium block mb-1">Çıkış Saati</label><input type="time" id="saat-basla" class="w-full p-2.5 rounded-lg text-lg font-normal"></div><div><label class="text-sm text-zinc-500 font-medium block mb-1">Dönüş Saati</label><input type="time" id="saat-bitis" class="w-full p-2.5 rounded-lg text-lg font-normal"></div></div></div>
+      
+      <div id="form-saatlik" class="space-y-3 p-3 bg-zinc-900/50 rounded-xl border border-zinc-800">
+        <div class="grid grid-cols-2 gap-2">
+            <div><label class="text-sm text-zinc-500 font-medium block mb-1">Tarih</label><input type="date" id="saat-tarih" class="w-full p-2.5 rounded-lg text-lg font-normal"></div>
+            <div><label class="text-sm text-zinc-500 font-medium block mb-1">Çıkış Saati</label><input type="time" id="saat-basla" class="w-full p-2.5 rounded-lg text-lg font-normal"></div>
+        </div>
+      </div>
+
       <div id="form-gunluk" class="space-y-3 hidden p-3 bg-zinc-900/50 rounded-xl border border-zinc-800"><div class="grid grid-cols-2 gap-2"><div><label class="text-sm text-zinc-500 font-medium block mb-1">Başlangıç</label><input type="date" id="gun-basla" class="w-full p-2.5 rounded-lg text-lg font-normal"></div><div><label class="text-sm text-zinc-500 font-medium block mb-1">Bitiş</label><input type="date" id="gun-bitis" class="w-full p-2.5 rounded-lg text-lg font-normal"></div></div></div>
       <div id="form-rapor" class="hidden mt-2 p-3 bg-pink-900/10 rounded-xl border border-pink-500/20"><label class="text-sm text-pink-400 block mb-2 font-semibold">Rapor Durumu:</label><div class="flex gap-4 text-base"><label class="flex items-center gap-2 cursor-pointer text-white font-medium"><input type="radio" name="rapor" value="Raporlu" checked class="accent-[#e6007e]"> Raporluyum</label><label class="flex items-center gap-2 cursor-pointer text-white font-medium"><input type="radio" name="rapor" value="Raporsuz" class="accent-[#e6007e]"> Raporsuz</label></div></div>
       <div><label class="text-sm text-zinc-500 font-medium block mb-1">Açıklama / Sebep</label><textarea id="izin-sebep" rows="2" placeholder="Nedenini kısaca belirtin..." class="w-full p-3 rounded-xl text-base font-normal resize-none"></textarea></div>
@@ -88,6 +96,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    // getDocs HİÇBİR YERE KAYBOLMADI, BURADA!
     import { getFirestore, collection, addDoc, serverTimestamp, query, where, getDocs, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
     const app = initializeApp({ apiKey: "AIzaSyApUdfMEqxZDdj86j_U3h1u6Rj70blQeuM", authDomain: "tempo-personel.firebaseapp.com", projectId: "tempo-personel", storageBucket: "tempo-personel.firebasestorage.app", messagingSenderId: "799482514096", appId: "1:799482514096:web:d7bf38e355defe00e24975" });
@@ -170,7 +179,7 @@
         try {
           await addDoc(collection(db, "yoklamalar"), { adSoyad: aktifKullanici.adSoyad, kullaniciAdi: aktifKullanici.kAdi, islemZamani: serverTimestamp(), durum: durum, sistemNotu: not });
           await updateDoc(doc(db, "personeller", aktifKullanici.docId), { sonDurum: durum });
-          msj.className = "text-base text-center font-semibold mb-4 block text-green-400 bg-green-500/10"; msj.innerText = `${durum} Onaylandı!`; setTimeout(() => msj.classList.add("hidden"), 2000);
+          msj.className = "text-base text-center font-semibold mb-4 block text-green-400 bg-green-500/10"; msj.innerText = `${durum} Kaydedildi!`; setTimeout(() => msj.classList.add("hidden"), 2000);
         } catch (e) { msj.className = "text-base text-center font-semibold mb-4 block text-red-400 bg-red-500/10"; msj.innerText = "Hata oluştu!"; }
       };
 
@@ -200,16 +209,19 @@
     document.getElementById("izin-gonder-btn").addEventListener("click", async () => {
       const btn = document.getElementById("izin-gonder-btn"); const msj = document.getElementById("izin-mesaj");
       let tur = iTur.value; let sebep = document.getElementById("izin-sebep").value; let detayStr = "";
+      
+      // DEĞİŞEN KISIM: Sadece tarih ve çıkış saati alındı
       if (tur.includes("Saatlik") || tur.includes("Görev")) {
-        const trh = document.getElementById("saat-tarih").value; const bs = document.getElementById("saat-basla").value; const bt = document.getElementById("saat-bitis").value;
-        if(!trh||!bs||!bt){ msj.innerText="Tarih/saat giriniz."; msj.className="text-sm text-center font-medium mt-2 text-red-400 block"; return;}
-        detayStr = `${trh} | ${bs} - ${bt}`;
+        const trh = document.getElementById("saat-tarih").value; const bs = document.getElementById("saat-basla").value;
+        if(!trh||!bs){ msj.innerText="Tarih ve çıkış saati giriniz."; msj.className="text-sm text-center font-medium mt-2 text-red-400 block"; return;}
+        detayStr = `${trh} | Çıkış: ${bs}`;
       } else {
         const bs = document.getElementById("gun-basla").value; const bt = document.getElementById("gun-bitis").value;
         if(!bs||!bt){ msj.innerText="Tarih aralığı seçiniz."; msj.className="text-sm text-center font-medium mt-2 text-red-400 block"; return;}
         detayStr = `${bs} ile ${bt}`;
         if(tur.includes("Sağlık")) detayStr += ` (${document.querySelector('input[name="rapor"]:checked').value})`;
       }
+      
       btn.disabled=true; btn.innerText="Gönderiliyor...";
       try {
         await addDoc(collection(db, "izinTalepleri"), { kullanici: aktifKullanici.adSoyad, tur: tur, tarihDetay: detayStr, sebep: sebep, durum: "Onay Bekliyor", talepZamani: serverTimestamp() });
@@ -219,7 +231,3 @@
   </script>
 </body>
 </html>
-
-
-
-
