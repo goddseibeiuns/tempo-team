@@ -98,35 +98,7 @@
           <div class="md:col-span-2">
             <label class="text-sm text-zinc-400 font-medium block mb-1">Ay / Yıl Seçin:</label>
             <select id="filtre-ay" class="w-full p-2.5 rounded-lg text-sm bg-zinc-900 border-zinc-700 text-white">
-              <optgroup label="2026">
-                <option value="0" data-yil="2026">Ocak 2026</option>
-                <option value="1" data-yil="2026">Şubat 2026</option>
-                <option value="2" data-yil="2026" selected>Mart 2026</option>
-                <option value="3" data-yil="2026">Nisan 2026</option>
-                <option value="4" data-yil="2026">Mayıs 2026</option>
-                <option value="5" data-yil="2026">Haziran 2026</option>
-                <option value="6" data-yil="2026">Temmuz 2026</option>
-                <option value="7" data-yil="2026">Ağustos 2026</option>
-                <option value="8" data-yil="2026">Eylül 2026</option>
-                <option value="9" data-yil="2026">Ekim 2026</option>
-                <option value="10" data-yil="2026">Kasım 2026</option>
-                <option value="11" data-yil="2026">Aralık 2026</option>
-              </optgroup>
-              <optgroup label="2025">
-                <option value="0" data-yil="2025">Ocak 2025</option>
-                <option value="1" data-yil="2025">Şubat 2025</option>
-                <option value="2" data-yil="2025">Mart 2025</option>
-                <option value="3" data-yil="2025">Nisan 2025</option>
-                <option value="4" data-yil="2025">Mayıs 2025</option>
-                <option value="5" data-yil="2025">Haziran 2025</option>
-                <option value="6" data-yil="2025">Temmuz 2025</option>
-                <option value="7" data-yil="2025">Ağustos 2025</option>
-                <option value="8" data-yil="2025">Eylül 2025</option>
-                <option value="9" data-yil="2025">Ekim 2025</option>
-                <option value="10" data-yil="2025">Kasım 2025</option>
-                <option value="11" data-yil="2025">Aralık 2025</option>
-              </optgroup>
-            </select>
+              </select>
           </div>
           <div class="flex items-end">
             <button id="raporla-btn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm py-2.5 rounded-lg transition shadow-lg flex justify-center items-center gap-2">
@@ -295,7 +267,49 @@
     document.getElementById("canli-tarih").innerText = new Date().toLocaleDateString('tr-TR', ops);
     const bugunStr = new Date().toISOString().split('T')[0];
 
-    // MÜKEMMEL YILLIK İZİN HESAPLAMA MOTORU (Senin Kurallarınla)
+    // DİNAMİK AY/YIL DROPDOWN OLUŞTURUCU
+    function ayYilDropdownDoldur() {
+        const aySelect = document.getElementById("filtre-ay");
+        if(aySelect.options.length > 0) return; // Sadece bir kez doldurulsun
+        
+        const aylar = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+        const simdikiTarih = new Date();
+        const simdikiYil = simdikiTarih.getFullYear();
+        const simdikiAy = simdikiTarih.getMonth();
+
+        let enEskiYil = simdikiYil;
+        // Personellerin en eski işe giriş yılını bulalım
+        aktifPersonelListesi.forEach(p => {
+            if(p.data.giris) {
+                const gYil = new Date(p.data.giris).getFullYear();
+                if(gYil < enEskiYil) enEskiYil = gYil;
+            }
+        });
+        
+        // Veritabanı hatalarına karşı çok eski yılları (örn 1990) filtrele, en az 2024 olsun.
+        if(enEskiYil < 2024) enEskiYil = 2024; 
+
+        for (let y = simdikiYil; y >= enEskiYil; y--) {
+            const optgroup = document.createElement("optgroup");
+            optgroup.label = y;
+
+            // İçinde bulunduğumuz yıldaysak, sadece bulunduğumuz aya kadar olanları listele (gelecek ayları listeleme)
+            let bitisAyi = (y === simdikiYil) ? simdikiAy : 11;
+            
+            for (let m = bitisAyi; m >= 0; m--) {
+                const option = document.createElement("option");
+                option.value = m;
+                option.dataset.yil = y;
+                option.text = `${aylar[m]} ${y}`;
+                // Günümüz ayını varsayılan seçili yap
+                if (y === simdikiYil && m === simdikiAy) option.selected = true;
+                optgroup.appendChild(option);
+            }
+            aySelect.appendChild(optgroup);
+        }
+    }
+
+    // YILLIK İZİN HESAPLAMA MOTORU
     function yillikIzinHesapla(dogumTarihi, iseGirisTarihi) {
         if(!dogumTarihi || !iseGirisTarihi) return 0;
         const bugun = new Date();
@@ -313,13 +327,11 @@
         else if (calismaYili > 5 && calismaYili <= 15) hakedis = 20;
         else if (calismaYili > 15) hakedis = 26;
 
-        // 18 yaş altı veya 50 yaş üstü ise +4 gün kuralı
         if (hakedis > 0 && (yas < 18 || yas > 50)) hakedis += 4;
         
         return hakedis;
     }
 
-    // Dakika Çevirme (Saat ve Dakika Olarak)
     function dakikaCevir(dakika) { 
         if(dakika <= 0) return "0s 0d";
         const s = Math.floor(dakika / 60); 
@@ -347,6 +359,9 @@
           tablo.innerHTML += `<tr class="border-b border-zinc-800/50 hover:bg-zinc-800/30 transition"><td class="px-4 py-3 font-bold text-white">${adSoyad}</td><td class="px-4 py-3 font-mono text-brand text-sm font-semibold">${p.kAdi} <br><span class="text-zinc-500 font-normal text-xs">Şifre: ${p.sifre}</span></td><td class="px-4 py-3">${p.aktifMi ? `<span class="bg-lime-500/20 text-limey px-2 py-1 rounded font-semibold text-xs">Aktif</span>` : `<span class="bg-red-500/20 text-red-400 px-2 py-1 rounded font-semibold text-xs">Ayrıldı</span>`}</td><td class="px-4 py-3 text-right">${islem}</td></tr>`;
         });
       }
+      
+      // Personel listesi yüklendikten sonra Ay/Yıl dropdown'ını doldur
+      ayYilDropdownDoldur();
       canliTakipGuncelle();
     });
 
@@ -431,178 +446,184 @@
         });
     }
 
-    // YENİ! KUSURSUZ RAPORLAMA VE EXCEL MOTORU
+    // YENİ! KUSURSUZ RAPORLAMA VE EXCEL MOTORU (HATA DÜZELTİLDİ)
     document.getElementById("raporla-btn").addEventListener("click", async () => {
         const btn = document.getElementById("raporla-btn");
         btn.disabled = true; btn.innerText = "Hesaplanıyor...";
         
-        const pId = document.getElementById("filtre-personel").value;
-        const aySelect = document.getElementById("filtre-ay");
-        const ay = parseInt(aySelect.value); // 0-11
-        const yil = parseInt(aySelect.options[aySelect.selectedIndex].dataset.yil);
-        
-        if (pId === "HEPSI" || !pId) {
-            alert("Lütfen detaylı puantajını çıkarmak istediğiniz personeli seçin.");
-            btn.disabled = false; btn.innerText = "Analiz Et";
-            return;
-        }
-        
-        const personelData = aktifPersonelListesi.find(p => p.id === pId).data;
-        const adSoyad = `${personelData.ad} ${personelData.soyad}`;
-        
-        // 1) Yıllık İzin Bakiye Hesaplaması
-        const hakedisGunu = yillikIzinHesapla(personelData.dogum, personelData.giris);
-        const devir = parseInt(personelData.devirIzin) || 0;
-        const toplamIzinHakki = hakedisGunu + devir;
+        try {
+            const pId = document.getElementById("filtre-personel").value;
+            const aySelect = document.getElementById("filtre-ay");
+            const ay = parseInt(aySelect.value); // 0-11
+            const yil = parseInt(aySelect.options[aySelect.selectedIndex].dataset.yil);
+            
+            if (pId === "HEPSI" || !pId) {
+                alert("Lütfen detaylı puantajını çıkarmak istediğiniz personeli seçin.");
+                btn.disabled = false; btn.innerText = "Analiz Et";
+                return;
+            }
+            
+            const personelData = aktifPersonelListesi.find(p => p.id === pId).data;
+            const adSoyad = `${personelData.ad} ${personelData.soyad}`;
+            
+            // 1) Yıllık İzin Bakiye Hesaplaması
+            const hakedisGunu = yillikIzinHesapla(personelData.dogum, personelData.giris);
+            const devir = parseInt(personelData.devirIzin) || 0;
+            const toplamIzinHakki = hakedisGunu + devir;
 
-        // Onaylanmış tüm yıllık izinleri Firebase'den çek
-        const tumIzinlerSnap = await getDocs(query(collection(db, "izinTalepleri"), where("kullanici", "==", adSoyad), where("durum", "==", "Onaylandı")));
-        let kullanilanYillikIzinGun = 0;
-        tumIzinlerSnap.forEach(d => {
-            const v = d.data();
-            // Kesinti türü "Yıllık İzinden Düşülecek" olarak seçilmişse düş
-            if (v.tur.includes("Yıllık İzin") || v.kesintiTuru === "Yıllık İzinden Düşülecek") {
-                kullanilanYillikIzinGun += 1; 
-            }
-        });
-        const kalanIzin = Math.max(0, toplamIzinHakki - kullanilanYillikIzinGun);
-        
-        // 2) Günlük Yoklama ve Mesai Hesaplama
-        const gunSayisi = new Date(yil, ay + 1, 0).getDate();
-        let raporTablo = ""; let excelData = [];
-        let stats = { isGunu: 0, geldigiGun: 0, eksik: 0, izinli: 0 };
-        
-        const baslangicTarihi = new Date(yil, ay, 1);
-        const bitisTarihi = new Date(yil, ay + 1, 0, 23, 59, 59);
-        
-        const yoklamaSnap = await getDocs(query(collection(db, "yoklamalar"), 
-            where("kullaniciAdi", "==", personelData.kAdi),
-            where("islemZamani", ">=", Timestamp.fromDate(baslangicTarihi)),
-            where("islemZamani", "<=", Timestamp.fromDate(bitisTarihi))
-        ));
-        
-        let hareketler = {};
-        yoklamaSnap.forEach(d => {
-            const h = d.data(); 
-            const dateObj = h.islemZamani.toDate(); 
-            const dateStr = dateObj.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-            if(!hareketler[dateStr]) hareketler[dateStr] = [];
-            hareketler[dateStr].push({ durum: h.durum, saat: dateObj });
-        });
-        
-        for (let i = 1; i <= gunSayisi; i++) {
-            const currentD = new Date(yil, ay, i);
-            const dateStr = currentD.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-            const dayOfWeek = currentD.getDay();
-            // CUMARTESİ VE PAZAR ÇALIŞILMIYOR
-            const isHaftaSonu = (dayOfWeek === 0 || dayOfWeek === 6); 
-            
-            let durum = isHaftaSonu ? "Hafta Sonu" : "Gelmeye Bekleniyor";
-            let girisSaati = "-"; let cikisSaati = "-";
-            let eksikDk = 0; let fazlaDk = 0; let netCalismaDk = 0;
-            
-            if (!isHaftaSonu) stats.isGunu++;
-            
-            const gunlukHareketler = hareketler[dateStr] || [];
-            if (gunlukHareketler.length > 0) {
-                gunlukHareketler.sort((a,b) => a.saat - b.saat);
-                
-                const girisler = gunlukHareketler.filter(h => h.durum === "İşe Giriş");
-                const cikislar = gunlukHareketler.filter(h => h.durum === "İşten Çıkış");
-                const tamGunIzin = gunlukHareketler.find(h => h.durum.includes("Tam Gün"));
-                
-                if (tamGunIzin) {
-                    durum = tamGunIzin.durum;
-                    if (!isHaftaSonu) stats.izinli++;
-                } else if (girisler.length > 0) {
-                    girisSaati = girisler[0].saat.toLocaleTimeString('tr-TR', {hour: '2-digit', minute:'2-digit'});
-                    if (!isHaftaSonu) stats.geldigiGun++;
-                    
-                    if (cikislar.length > 0) {
-                        cikisSaati = cikislar[cikislar.length - 1].saat.toLocaleTimeString('tr-TR', {hour: '2-digit', minute:'2-digit'});
-                        
-                        const girisZamani = girisler[0].saat;
-                        const cikisZamani = cikislar[cikislar.length - 1].saat;
-                        
-                        // 08:30 - 18:30 MESAİ KURALI
-                        const expectedGiris = new Date(currentD); expectedGiris.setHours(8, 30, 0);
-                        const expectedCikis = new Date(currentD); expectedCikis.setHours(18, 30, 0);
-                        
-                        // Hafta sonu çalışma varsa hepsi fazla mesaidir
-                        if(isHaftaSonu) {
-                            fazlaDk += (cikisZamani - girisZamani) / 60000;
-                        } else {
-                            if (girisZamani > expectedGiris) eksikDk += (girisZamani - expectedGiris) / 60000;
-                            if (cikisZamani < expectedCikis) eksikDk += (expectedCikis - cikisZamani) / 60000;
-                            if (cikisZamani > expectedCikis) fazlaDk += (cikisZamani - expectedCikis) / 60000;
-                            if (girisZamani < expectedGiris) fazlaDk += (expectedGiris - girisZamani) / 60000;
-                        }
-                        
-                        // Gün içindeki "Saatlik İzin" vb. kesintilerini hesapla (Net çalışmadan düşer)
-                        const izCikislari = gunlukHareketler.filter(h => h.durum.includes("Çıkışı") && h.durum !== "İşten Çıkış");
-                        const izDonusleri = gunlukHareketler.filter(h => h.durum.includes("Dönüşü"));
-                        let izinDk = 0;
-                        for(let j=0; j < izCikislari.length; j++) {
-                            const c = izCikislari[j].saat;
-                            const d = izDonusleri[j] ? izDonusleri[j].saat : null;
-                            if(d) izinDk += (d - c) / 60000;
-                        }
-                        
-                        netCalismaDk = ((cikisZamani - girisZamani) / 60000) - izinDk;
-                        if(netCalismaDk < 0) netCalismaDk = 0;
-                        durum = isHaftaSonu ? "Hafta Sonu Mesaisi" : "Çalıştı";
-                    } else {
-                        durum = "Çıkış Yapmadı";
-                    }
+            const tumIzinlerSnap = await getDocs(query(collection(db, "izinTalepleri"), where("kullanici", "==", adSoyad), where("durum", "==", "Onaylandı")));
+            let kullanilanYillikIzinGun = 0;
+            tumIzinlerSnap.forEach(d => {
+                const v = d.data();
+                if (v.tur.includes("Yıllık İzin") || v.kesintiTuru === "Yıllık İzinden Düşülecek") {
+                    kullanilanYillikIzinGun += 1; 
                 }
-            } else {
-                if (!isHaftaSonu) { durum = "Devamsız"; stats.eksik++; }
+            });
+            const kalanIzin = Math.max(0, toplamIzinHakki - kullanilanYillikIzinGun);
+            
+            // 2) Günlük Yoklama ve Mesai Hesaplama
+            const gunSayisi = new Date(yil, ay + 1, 0).getDate();
+            let raporTablo = ""; let excelData = [];
+            let stats = { isGunu: 0, geldigiGun: 0, eksik: 0, izinli: 0 };
+            
+            const baslangicTarihi = new Date(yil, ay, 1);
+            const bitisTarihi = new Date(yil, ay + 1, 0, 23, 59, 59);
+            
+            // DÜZELTME: Firebase "Index" hatasını önlemek için sadece kullanıcıyı çektik, tarihi tarayıcıda filtreledik
+            const yoklamaSnap = await getDocs(query(collection(db, "yoklamalar"), where("kullaniciAdi", "==", personelData.kAdi)));
+            
+            let hareketler = {};
+            yoklamaSnap.forEach(d => {
+                const h = d.data(); 
+                if(!h.islemZamani) return; // Boş/hatalı kayıt kontrolü
+                
+                const dateObj = h.islemZamani.toDate(); 
+                
+                // İstenen Ay/Yıl aralığında mı?
+                if (dateObj >= baslangicTarihi && dateObj <= bitisTarihi) {
+                    const dateStr = dateObj.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                    if(!hareketler[dateStr]) hareketler[dateStr] = [];
+                    hareketler[dateStr].push({ durum: h.durum, saat: dateObj });
+                }
+            });
+            
+            for (let i = 1; i <= gunSayisi; i++) {
+                const currentD = new Date(yil, ay, i);
+                const dateStr = currentD.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                const dayOfWeek = currentD.getDay();
+                // CUMARTESİ VE PAZAR ÇALIŞILMIYOR
+                const isHaftaSonu = (dayOfWeek === 0 || dayOfWeek === 6); 
+                
+                let durum = isHaftaSonu ? "Hafta Sonu" : "Gelmeye Bekleniyor";
+                let girisSaati = "-"; let cikisSaati = "-";
+                let eksikDk = 0; let fazlaDk = 0; let netCalismaDk = 0;
+                
+                if (!isHaftaSonu) stats.isGunu++;
+                
+                const gunlukHareketler = hareketler[dateStr] || [];
+                if (gunlukHareketler.length > 0) {
+                    gunlukHareketler.sort((a,b) => a.saat - b.saat);
+                    
+                    const girisler = gunlukHareketler.filter(h => h.durum === "İşe Giriş");
+                    const cikislar = gunlukHareketler.filter(h => h.durum === "İşten Çıkış");
+                    const tamGunIzin = gunlukHareketler.find(h => h.durum.includes("Tam Gün"));
+                    
+                    if (tamGunIzin) {
+                        durum = tamGunIzin.durum;
+                        if (!isHaftaSonu) stats.izinli++;
+                    } else if (girisler.length > 0) {
+                        girisSaati = girisler[0].saat.toLocaleTimeString('tr-TR', {hour: '2-digit', minute:'2-digit'});
+                        if (!isHaftaSonu) stats.geldigiGun++;
+                        
+                        if (cikislar.length > 0) {
+                            cikisSaati = cikislar[cikislar.length - 1].saat.toLocaleTimeString('tr-TR', {hour: '2-digit', minute:'2-digit'});
+                            
+                            const girisZamani = girisler[0].saat;
+                            const cikisZamani = cikislar[cikislar.length - 1].saat;
+                            
+                            // 08:30 - 18:30 MESAİ KURALI
+                            const expectedGiris = new Date(currentD); expectedGiris.setHours(8, 30, 0);
+                            const expectedCikis = new Date(currentD); expectedCikis.setHours(18, 30, 0);
+                            
+                            if(isHaftaSonu) {
+                                fazlaDk += (cikisZamani - girisZamani) / 60000;
+                            } else {
+                                if (girisZamani > expectedGiris) eksikDk += (girisZamani - expectedGiris) / 60000;
+                                if (cikisZamani < expectedCikis) eksikDk += (expectedCikis - cikisZamani) / 60000;
+                                if (cikisZamani > expectedCikis) fazlaDk += (cikisZamani - expectedCikis) / 60000;
+                                if (girisZamani < expectedGiris) fazlaDk += (expectedGiris - girisZamani) / 60000;
+                            }
+                            
+                            const izCikislari = gunlukHareketler.filter(h => h.durum.includes("Çıkışı") && h.durum !== "İşten Çıkış");
+                            const izDonusleri = gunlukHareketler.filter(h => h.durum.includes("Dönüşü"));
+                            let izinDk = 0;
+                            for(let j=0; j < izCikislari.length; j++) {
+                                const c = izCikislari[j].saat;
+                                const d = izDonusleri[j] ? izDonusleri[j].saat : null;
+                                if(d) izinDk += (d - c) / 60000;
+                            }
+                            
+                            netCalismaDk = ((cikisZamani - girisZamani) / 60000) - izinDk;
+                            if(netCalismaDk < 0) netCalismaDk = 0;
+                            durum = isHaftaSonu ? "Hafta Sonu Mesaisi" : "Çalıştı";
+                        } else {
+                            durum = "Çıkış Yapmadı";
+                        }
+                    }
+                } else {
+                    if (!isHaftaSonu) { durum = "Devamsız"; stats.eksik++; }
+                }
+                
+                let satirClass = "";
+                if (isHaftaSonu && durum === "Hafta Sonu") satirClass = "bg-zinc-800/20 text-zinc-500";
+                else if (durum === "Devamsız" || eksikDk > 0) satirClass = "bg-red-900/10 text-red-400";
+                else if (durum === "Çalıştı" && eksikDk === 0) satirClass = "text-green-400";
+                else if (durum.includes("İzin") || durum.includes("Görev")) satirClass = "text-orange-400";
+                
+                raporTablo += `
+                    <tr class="border-b border-zinc-800/50 hover:bg-zinc-800/30 transition ${satirClass}">
+                        <td class="px-4 py-3">${dateStr}</td>
+                        <td class="px-4 py-3">${girisSaati}</td>
+                        <td class="px-4 py-3">${cikisSaati}</td>
+                        <td class="px-4 py-3 font-semibold">${eksikDk > 0 ? '-' + Math.round(eksikDk) + ' dk' : '-'}</td>
+                        <td class="px-4 py-3 font-semibold">${fazlaDk > 0 ? '+' + Math.round(fazlaDk) + ' dk' : '-'}</td>
+                        <td class="px-4 py-3 font-bold">${netCalismaDk > 0 ? dakikaCevir(netCalismaDk) : '-'}</td>
+                        <td class="px-4 py-3 font-medium">${durum}</td>
+                    </tr>
+                `;
+                
+                excelData.push({
+                    "Tarih": dateStr,
+                    "Durum": durum,
+                    "Giriş Saati": girisSaati,
+                    "Çıkış Saati": cikisSaati,
+                    "Eksik Mesai (Dk)": eksikDk > 0 ? Math.round(eksikDk) : 0,
+                    "Fazla Mesai (Dk)": fazlaDk > 0 ? Math.round(fazlaDk) : 0,
+                    "Net Çalışma": netCalismaDk > 0 ? dakikaCevir(netCalismaDk) : "-"
+                });
             }
             
-            let satirClass = "";
-            if (isHaftaSonu && durum === "Hafta Sonu") satirClass = "bg-zinc-800/20 text-zinc-500";
-            else if (durum === "Devamsız" || eksikDk > 0) satirClass = "bg-red-900/10 text-red-400";
-            else if (durum === "Çalıştı" && eksikDk === 0) satirClass = "text-green-400";
-            else if (durum.includes("İzin") || durum.includes("Görev")) satirClass = "text-orange-400";
+            document.getElementById("tablo-govdesi").innerHTML = raporTablo;
             
-            raporTablo += `
-                <tr class="border-b border-zinc-800/50 hover:bg-zinc-800/30 transition ${satirClass}">
-                    <td class="px-4 py-3">${dateStr}</td>
-                    <td class="px-4 py-3">${girisSaati}</td>
-                    <td class="px-4 py-3">${cikisSaati}</td>
-                    <td class="px-4 py-3 font-semibold">${eksikDk > 0 ? '-' + Math.round(eksikDk) + ' dk' : '-'}</td>
-                    <td class="px-4 py-3 font-semibold">${fazlaDk > 0 ? '+' + Math.round(fazlaDk) + ' dk' : '-'}</td>
-                    <td class="px-4 py-3 font-bold">${netCalismaDk > 0 ? dakikaCevir(netCalismaDk) : '-'}</td>
-                    <td class="px-4 py-3 font-medium">${durum}</td>
-                </tr>
-            `;
+            document.getElementById("stat-isgunu").innerText = stats.isGunu;
+            document.getElementById("stat-gun").innerText = stats.geldigiGun;
+            document.getElementById("stat-eksik").innerText = stats.eksik;
+            document.getElementById("stat-izinli").innerText = stats.izinli;
+            document.getElementById("stat-yillik-izin").innerText = kalanIzin + " Gün";
             
-            excelData.push({
-                "Tarih": dateStr,
-                "Durum": durum,
-                "Giriş Saati": girisSaati,
-                "Çıkış Saati": cikisSaati,
-                "Eksik Mesai (Dk)": eksikDk > 0 ? Math.round(eksikDk) : 0,
-                "Fazla Mesai (Dk)": fazlaDk > 0 ? Math.round(fazlaDk) : 0,
-                "Net Çalışma": netCalismaDk > 0 ? dakikaCevir(netCalismaDk) : "-"
-            });
+            document.getElementById("ozet-kartlar").classList.remove("hidden");
+            document.getElementById("rapor-sonuclari-alani").classList.remove("hidden");
+            
+            window.suAnkiExcelData = excelData;
+            window.suAnkiRaporAd = `${adSoyad.replace(/\s+/g, '_')}_${aySelect.options[aySelect.selectedIndex].text}`;
+            
+            btn.disabled = false; btn.innerText = "Analiz Et";
+
+        } catch (hata) {
+            console.error(hata);
+            alert("Rapor hesaplanırken bir hata oluştu: " + hata.message);
+            btn.disabled = false; btn.innerText = "Analiz Et";
         }
-        
-        document.getElementById("tablo-govdesi").innerHTML = raporTablo;
-        
-        document.getElementById("stat-isgunu").innerText = stats.isGunu;
-        document.getElementById("stat-gun").innerText = stats.geldigiGun;
-        document.getElementById("stat-eksik").innerText = stats.eksik;
-        document.getElementById("stat-izinli").innerText = stats.izinli;
-        document.getElementById("stat-yillik-izin").innerText = kalanIzin + " Gün";
-        
-        document.getElementById("ozet-kartlar").classList.remove("hidden");
-        document.getElementById("rapor-sonuclari-alani").classList.remove("hidden");
-        
-        window.suAnkiExcelData = excelData;
-        window.suAnkiRaporAd = `${adSoyad.replace(/\s+/g, '_')}_${aySelect.options[aySelect.selectedIndex].text}`;
-        
-        btn.disabled = false; btn.innerText = "Analiz Et";
     });
 
     document.getElementById("excel-indir-btn").addEventListener("click", async () => {
