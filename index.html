@@ -96,7 +96,6 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-    // getDocs HİÇBİR YERE KAYBOLMADI, BURADA!
     import { getFirestore, collection, addDoc, serverTimestamp, query, where, getDocs, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
     const app = initializeApp({ apiKey: "AIzaSyApUdfMEqxZDdj86j_U3h1u6Rj70blQeuM", authDomain: "tempo-personel.firebaseapp.com", projectId: "tempo-personel", storageBucket: "tempo-personel.firebasestorage.app", messagingSenderId: "799482514096", appId: "1:799482514096:web:d7bf38e355defe00e24975" });
@@ -118,6 +117,7 @@
     }
     oturumKontrol();
 
+    // GÜNCELLENEN AKILLI KİLİT MANTIĞI
     function butonlariAyarla() {
       const bGiris = document.getElementById("btn-ise-giris"); const bCikis = document.getElementById("btn-isten-cikis"); const bIzCikis = document.getElementById("btn-izin-cikis"); const bIzDonus = document.getElementById("btn-izin-donus"); const bGrCikis = document.getElementById("btn-gorev-cikis"); const bGrDonus = document.getElementById("btn-gorev-donus");
       
@@ -126,13 +126,30 @@
           b.classList.remove("border-[#e6007e]", "text-[#e6007e]", "border-teal-500", "text-teal-400");
       });
       
-      if (mevcutDurum === "İşten Çıkış" || mevcutDurum === undefined) { bGiris.classList.remove("disabled"); } 
-      else if (mevcutDurum === "İşe Giriş" || mevcutDurum === "İzin Dönüşü" || mevcutDurum === "Görev Dönüşü") {
+      if (mevcutDurum === "İşten Çıkış" || mevcutDurum === undefined) { 
+          bGiris.classList.remove("disabled"); 
+      } 
+      else if (mevcutDurum === "İşe Giriş") {
         bCikis.classList.remove("disabled");
         if(bugunIzinliMi) { bIzCikis.classList.remove("disabled"); document.getElementById("kilit-izin").classList.add("hidden"); bIzCikis.classList.add("border-[#e6007e]", "text-[#e6007e]"); } else { document.getElementById("kilit-izin").classList.remove("hidden"); }
         if(bugunGorevliMi) { bGrCikis.classList.remove("disabled"); document.getElementById("kilit-gorev").classList.add("hidden"); bGrCikis.classList.add("border-teal-500", "text-teal-400"); } else { document.getElementById("kilit-gorev").classList.remove("hidden"); }
       } 
-      else if (mevcutDurum === "İzin Çıkışı") { bIzDonus.classList.remove("disabled"); } else if (mevcutDurum === "Görev Çıkışı") { bGrDonus.classList.remove("disabled"); }
+      else if (mevcutDurum === "İzin Çıkışı") { 
+          bIzDonus.classList.remove("disabled"); 
+      } 
+      else if (mevcutDurum === "Görev Çıkışı") { 
+          bGrDonus.classList.remove("disabled"); 
+      }
+      else if (mevcutDurum === "İzin Dönüşü") {
+        bCikis.classList.remove("disabled");
+        document.getElementById("kilit-izin").classList.remove("hidden"); // İzin kullanıldı, kilitlendi.
+        if(bugunGorevliMi) { bGrCikis.classList.remove("disabled"); document.getElementById("kilit-gorev").classList.add("hidden"); bGrCikis.classList.add("border-teal-500", "text-teal-400"); } else { document.getElementById("kilit-gorev").classList.remove("hidden"); }
+      }
+      else if (mevcutDurum === "Görev Dönüşü") {
+        bCikis.classList.remove("disabled");
+        document.getElementById("kilit-gorev").classList.remove("hidden"); // Görev kullanıldı, kilitlendi.
+        if(bugunIzinliMi) { bIzCikis.classList.remove("disabled"); document.getElementById("kilit-izin").classList.add("hidden"); bIzCikis.classList.add("border-[#e6007e]", "text-[#e6007e]"); } else { document.getElementById("kilit-izin").classList.remove("hidden"); }
+      }
     }
 
     function personelDinleyicisiBaslat(docId) {
@@ -210,7 +227,6 @@
       const btn = document.getElementById("izin-gonder-btn"); const msj = document.getElementById("izin-mesaj");
       let tur = iTur.value; let sebep = document.getElementById("izin-sebep").value; let detayStr = "";
       
-      // DEĞİŞEN KISIM: Sadece tarih ve çıkış saati alındı
       if (tur.includes("Saatlik") || tur.includes("Görev")) {
         const trh = document.getElementById("saat-tarih").value; const bs = document.getElementById("saat-basla").value;
         if(!trh||!bs){ msj.innerText="Tarih ve çıkış saati giriniz."; msj.className="text-sm text-center font-medium mt-2 text-red-400 block"; return;}
