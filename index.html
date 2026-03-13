@@ -7,107 +7,70 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Play', sans-serif; background-color: #09090b; color: #e4e4e7; }
-    .glass-panel { background: rgba(24, 24, 27, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(63, 63, 70, 0.5); }
+    body { font-family: 'Play', sans-serif; background-color: #09090b; color: #e4e4e7; overflow-x: hidden; }
+    .glass-panel { background: rgba(24, 24, 27, 0.8); backdrop-filter: blur(16px); border: 1px solid rgba(63, 63, 70, 0.5); }
     input, select, textarea { background-color: #18181b; border: 1px solid #3f3f46; color: #f4f4f5; outline: none; }
     input:focus, select:focus, textarea:focus { border-color: #3b82f6; }
+    .app-btn { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; aspect-ratio: 1 / 1; border-radius: 1.25rem; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+    .app-btn:active { transform: scale(0.95); }
+    .app-btn.disabled { opacity: 0.4; pointer-events: none; filter: grayscale(100%); }
+    .btn-icon { font-size: 2rem; margin-bottom: 0.5rem; }
   </style>
 </head>
-<body class="flex items-center justify-center min-h-screen w-full px-4 relative">
+<body class="flex items-center justify-center min-h-screen w-full px-4 py-8 relative">
   
-  <div id="giris-ekrani" class="glass-panel p-8 rounded-2xl shadow-2xl w-full max-w-sm text-center">
-    <h1 class="text-3xl font-bold mb-2 tracking-wider text-white">TEMPO<span class="text-blue-500">TEAM</span></h1>
-    <p class="text-sm text-zinc-400 mb-8">Personel Giriş Portalı</p>
-    <div class="space-y-4">
-      <input type="text" id="kadi-input" placeholder="Kullanıcı Adı (Örn: ahmcel)" class="w-full px-4 py-3 rounded-xl transition">
-      <input type="password" id="sifre-input" placeholder="Şifre" class="w-full px-4 py-3 rounded-xl transition">
-      <button id="giris-yap-btn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition mt-2 shadow-lg">Sisteme Giriş Yap</button>
+  <div id="giris-ekrani" class="glass-panel p-8 rounded-3xl shadow-2xl w-full max-w-sm flex flex-col justify-between min-h-[80vh]">
+    <div>
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-black tracking-wider text-white">TEMPO<span class="text-blue-500">TEAM</span></h1>
+        <p class="text-xs text-zinc-400 mt-1 uppercase tracking-widest">Personel Portalı</p>
+      </div>
+      <div class="space-y-4">
+        <input type="text" id="kadi-input" placeholder="Kullanıcı Adı" class="w-full px-5 py-4 rounded-xl text-sm font-medium">
+        <input type="password" id="sifre-input" placeholder="Şifre" class="w-full px-5 py-4 rounded-xl text-sm font-medium">
+        <button id="giris-yap-btn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl mt-4 shadow-lg transition">Giriş Yap</button>
+      </div>
+      <p id="giris-hata-mesaji" class="mt-4 text-xs font-bold text-center text-red-400 hidden"></p>
     </div>
-    <p id="giris-hata-mesaji" class="mt-4 text-sm font-semibold text-red-400 hidden"></p>
+    <div class="mt-12 space-y-2 text-center opacity-70">
+      <p class="text-[10px] text-zinc-500 font-medium tracking-wide">• Cihazınızın Konum (GPS) ayarlarının açık olduğundan emin olun.</p>
+      <p class="text-[10px] text-zinc-500 font-medium tracking-wide">• Tarayıcınızın konum erişimi iznini onaylamanız gerekmektedir.</p>
+      <p class="text-[10px] text-zinc-500 font-medium tracking-wide">• Teknik destek için IT veya İnsan Kaynakları ile iletişime geçiniz.</p>
+    </div>
   </div>
 
-  <div id="yoklama-ekrani" class="glass-panel p-6 rounded-2xl shadow-2xl w-full max-w-sm hidden flex flex-col max-h-[95vh] overflow-y-auto">
-    <div class="flex justify-between items-center mb-6 border-b border-zinc-800 pb-4">
-      <h1 class="text-xl font-bold tracking-wider text-white">TEMPO<span class="text-blue-500">TEAM</span></h1>
-      <button id="cikis-yap-btn" class="text-xs text-zinc-500 hover:text-red-400 transition">Hesaptan Çık</button>
-    </div>
-    
-    <p class="text-zinc-400 mb-4 font-medium text-center">Hoş geldin, <br><span id="kullanici-bilgisi" class="text-white text-lg font-bold tracking-wide">...</span></p>
-    
-    <div id="uyari-1830" class="hidden bg-red-500/10 border border-red-500/50 text-red-400 p-3 rounded-xl text-xs font-bold text-center mb-4">
-      ⚠️ Saat 18:30'u geçti ve izinden dönmediniz. Lütfen doğrudan "İşten Çıkış" yapınız. (Konum aranmaz)
+  <div id="yoklama-ekrani" class="w-full max-w-sm hidden flex flex-col h-full">
+    <div class="flex justify-between items-end mb-6">
+      <div><h2 class="text-xs text-zinc-400 uppercase tracking-wider mb-1">Hoş Geldin,</h2><h1 id="kullanici-bilgisi" class="text-2xl font-bold text-white leading-none">...</h1></div>
+      <button id="cikis-yap-btn" class="text-xs font-bold text-red-400 hover:text-red-300 bg-red-400/10 px-3 py-1.5 rounded-lg transition">Çıkış</button>
     </div>
 
-    <div id="btn-group-giris" class="mb-6 hidden">
-      <button onclick="yoklamaIslemi('İşe Giriş')" class="w-full border border-green-500/50 bg-green-500/10 hover:bg-green-500/20 text-green-400 font-bold py-4 rounded-xl transition text-base shadow-lg">🟢 İşe Giriş Yap</button>
+    <p id="mesaj-alani" class="text-sm text-center font-bold mb-4 hidden px-4 py-2 rounded-lg"></p>
+
+    <div class="grid grid-cols-2 gap-4 mb-6">
+      <button onclick="yoklamaIslemi('İşe Giriş')" id="btn-ise-giris" class="app-btn bg-green-500/10 border border-green-500/30 text-green-400 hover:bg-green-500/20"><span class="btn-icon">🏭</span><span class="text-sm font-bold">İşe Giriş</span></button>
+      <button onclick="yoklamaIslemi('İşten Çıkış')" id="btn-isten-cikis" class="app-btn bg-orange-500/10 border border-orange-500/30 text-orange-400 hover:bg-orange-500/20 disabled"><span class="btn-icon">🏠</span><span class="text-sm font-bold">İşten Çıkış</span></button>
+      <button onclick="yoklamaIslemi('İzin Çıkışı')" id="btn-izin-cikis" class="app-btn bg-purple-500/10 border border-purple-500/30 text-purple-400 disabled relative"><span id="kilit-izin" class="absolute top-3 right-3 text-xs">🔒</span><span class="btn-icon">🚶</span><span class="text-sm font-bold">İzin Çıkışı</span></button>
+      <button onclick="yoklamaIslemi('İzin Dönüşü')" id="btn-izin-donus" class="app-btn bg-blue-500/10 border border-blue-500/30 text-blue-400 hover:bg-blue-500/20 disabled"><span class="btn-icon">🏢</span><span class="text-sm font-bold">İzin Dönüşü</span></button>
+      <button onclick="yoklamaIslemi('Görev Çıkışı')" id="btn-gorev-cikis" class="app-btn bg-teal-500/10 border border-teal-500/30 text-teal-400 disabled relative"><span id="kilit-gorev" class="absolute top-3 right-3 text-xs">🔒</span><span class="btn-icon">🚙</span><span class="text-sm font-bold">Görev Çıkış</span></button>
+      <button onclick="yoklamaIslemi('Görev Dönüşü')" id="btn-gorev-donus" class="app-btn bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20 disabled"><span class="btn-icon">🏭</span><span class="text-sm font-bold">Görev Dönüş</span></button>
     </div>
 
-    <div id="btn-group-mesai" class="grid grid-cols-2 gap-3 mb-6 hidden">
-      <button onclick="yoklamaIslemi('İşten Çıkış')" class="border border-orange-500/50 bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 font-bold py-4 rounded-xl transition text-sm shadow-md">🔴 İşten Çıkış</button>
-      <button onclick="yoklamaIslemi('İzin Çıkışı')" class="border border-purple-500/50 bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 font-bold py-4 rounded-xl transition text-sm shadow-md">🚶 İzin Çıkışı</button>
+    <div class="glass-panel rounded-2xl p-4 flex-1 flex flex-col">
+      <div class="flex justify-between items-center mb-3 border-b border-zinc-800 pb-2"><h3 class="text-sm font-bold text-white">İzin Taleplerim</h3><button id="izin-menu-ac-btn" class="text-xs bg-blue-600 text-white font-bold px-3 py-1.5 rounded-lg">+ Yeni Talep</button></div>
+      <div id="taleplerim-listesi" class="space-y-2 overflow-y-auto flex-1"><div class="text-center text-zinc-500 text-xs py-4">Sistemde kaydınız bulunmuyor.</div></div>
     </div>
-
-    <div id="btn-group-izin" class="grid grid-cols-2 gap-3 mb-6 hidden">
-      <button onclick="yoklamaIslemi('İzin Dönüşü')" class="border border-blue-500/50 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 font-bold py-4 rounded-xl transition text-sm shadow-md">🏢 İzin Dönüşü</button>
-      <button onclick="yoklamaIslemi('İşten Çıkış')" class="border border-orange-500/50 bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 font-bold py-4 rounded-xl transition text-sm shadow-md">🔴 İşten Çıkış</button>
-    </div>
-    
-    <p id="mesaj-alani" class="text-sm text-center font-bold mb-4 hidden"></p>
-
-    <div class="border-t border-zinc-800 pt-4 mb-auto">
-      <h3 class="text-sm font-bold text-zinc-400 mb-3 flex justify-between items-center">
-        Taleplerim <span class="text-[10px] bg-zinc-800 px-2 py-1 rounded">Canlı</span>
-      </h3>
-      <div id="taleplerim-listesi" class="space-y-2 max-h-32 overflow-y-auto text-xs pr-1">
-        <div class="text-center text-zinc-600 py-2">Henüz bir talebiniz yok.</div>
-      </div>
-    </div>
-
-    <button id="izin-menu-ac-btn" class="w-full mt-6 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition text-sm shadow-lg">
-      + Yeni İzin Talep Et
-    </button>
   </div>
 
-  <div id="izin-ekrani" class="glass-panel p-6 rounded-2xl shadow-2xl w-full max-w-sm hidden absolute z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-    <div class="flex justify-between items-center mb-6 border-b border-zinc-800 pb-4">
-      <h2 class="text-lg font-bold text-white">İzin Talebi</h2>
-      <button id="izin-kapat-btn" class="text-zinc-400 hover:text-white font-bold">✕</button>
-    </div>
+  <div id="izin-ekrani" class="glass-panel p-6 rounded-3xl shadow-2xl w-11/12 max-w-sm hidden fixed z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-t-4 border-blue-500">
+    <div class="flex justify-between items-center mb-6 border-b border-zinc-800 pb-4"><h2 class="text-lg font-bold text-white">İzin Talep Formu</h2><button id="izin-kapat-btn" class="text-zinc-400 hover:text-white font-bold bg-zinc-800 rounded-full w-8 h-8 flex items-center justify-center">✕</button></div>
     <div class="space-y-4">
-      <div>
-        <label class="text-xs text-zinc-500 block mb-1">İzin Türü</label>
-        <select id="izin-turu" class="w-full p-3 rounded-xl text-sm font-bold text-blue-400">
-          <option value="Saatlik İzin">⏳ Saatlik İzin</option>
-          <option value="Görev İzni">🏢 Görev İzni</option>
-          <option value="Günlük İzin (Yıllık)">📅 Günlük İzin (Yıllık)</option>
-          <option value="Sağlık İzni">🏥 Sağlık İzni</option>
-        </select>
-      </div>
-      <div id="form-saatlik" class="space-y-3">
-        <div><label class="text-xs text-zinc-500 block mb-1">Tarih</label><input type="date" id="saat-tarih" class="w-full p-2.5 rounded-xl text-sm"></div>
-        <div class="grid grid-cols-2 gap-2">
-          <div><label class="text-xs text-zinc-500 block mb-1">Çıkış Saati</label><input type="time" id="saat-basla" class="w-full p-2.5 rounded-xl text-sm"></div>
-          <div><label class="text-xs text-zinc-500 block mb-1">Dönüş Saati</label><input type="time" id="saat-bitis" class="w-full p-2.5 rounded-xl text-sm"></div>
-        </div>
-      </div>
-      <div id="form-gunluk" class="space-y-3 hidden">
-        <div class="grid grid-cols-2 gap-2">
-          <div><label class="text-xs text-zinc-500 block mb-1">Başlangıç</label><input type="date" id="gun-basla" class="w-full p-2.5 rounded-xl text-sm"></div>
-          <div><label class="text-xs text-zinc-500 block mb-1">Bitiş</label><input type="date" id="gun-bitis" class="w-full p-2.5 rounded-xl text-sm"></div>
-        </div>
-      </div>
-      <div id="form-rapor" class="hidden mt-2 p-3 bg-zinc-900 rounded-xl border border-zinc-700">
-        <label class="text-xs text-zinc-400 block mb-2 font-bold">Rapor Durumu:</label>
-        <div class="flex gap-4 text-sm">
-          <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="rapor" value="Raporlu" checked> Raporlu</label>
-          <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="rapor" value="Raporsuz"> Raporsuz</label>
-        </div>
-      </div>
-      <div>
-        <label class="text-xs text-zinc-500 block mb-1">Açıklama / Gidilecek Yer</label>
-        <textarea id="izin-sebep" rows="2" class="w-full p-3 rounded-xl text-sm resize-none"></textarea>
-      </div>
-      <button id="izin-gonder-btn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl mt-2 shadow-lg transition">Talebi Gönder</button>
+      <div><label class="text-xs text-zinc-500 block mb-1">İzin Türü</label><select id="izin-turu" class="w-full p-3 rounded-xl text-sm font-bold text-white bg-zinc-900 border-zinc-700"><option value="Saatlik İzin">⏳ Saatlik (Özel İş)</option><option value="Görev İzni">🚙 Şirket Görevi (Dışarıda)</option><option value="Günlük İzin (Yıllık)">📅 Günlük (Yıllık İzin)</option><option value="Sağlık İzni">🏥 Sağlık / Hastane</option></select></div>
+      <div id="form-saatlik" class="space-y-3 p-3 bg-zinc-900/50 rounded-xl border border-zinc-800"><div><label class="text-xs text-zinc-500 block mb-1">Tarih</label><input type="date" id="saat-tarih" class="w-full p-2.5 rounded-lg text-sm"></div><div class="grid grid-cols-2 gap-2"><div><label class="text-xs text-zinc-500 block mb-1">Çıkış Saati</label><input type="time" id="saat-basla" class="w-full p-2.5 rounded-lg text-sm"></div><div><label class="text-xs text-zinc-500 block mb-1">Dönüş Saati</label><input type="time" id="saat-bitis" class="w-full p-2.5 rounded-lg text-sm"></div></div></div>
+      <div id="form-gunluk" class="space-y-3 hidden p-3 bg-zinc-900/50 rounded-xl border border-zinc-800"><div class="grid grid-cols-2 gap-2"><div><label class="text-xs text-zinc-500 block mb-1">Başlangıç</label><input type="date" id="gun-basla" class="w-full p-2.5 rounded-lg text-sm"></div><div><label class="text-xs text-zinc-500 block mb-1">Bitiş</label><input type="date" id="gun-bitis" class="w-full p-2.5 rounded-lg text-sm"></div></div></div>
+      <div id="form-rapor" class="hidden mt-2 p-3 bg-red-900/10 rounded-xl border border-red-500/20"><label class="text-xs text-red-400 block mb-2 font-bold">Rapor Durumu:</label><div class="flex gap-4 text-sm"><label class="flex items-center gap-2 cursor-pointer text-white"><input type="radio" name="rapor" value="Raporlu" checked class="accent-red-500"> Raporluyum</label><label class="flex items-center gap-2 cursor-pointer text-white"><input type="radio" name="rapor" value="Raporsuz" class="accent-red-500"> Raporsuz</label></div></div>
+      <div><label class="text-xs text-zinc-500 block mb-1">Açıklama / Sebep</label><textarea id="izin-sebep" rows="2" placeholder="Nedenini kısaca belirtin..." class="w-full p-3 rounded-xl text-sm resize-none"></textarea></div>
+      <button id="izin-gonder-btn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl mt-2 shadow-lg transition">Talebi Onaya Gönder</button>
       <p id="izin-mesaj" class="text-xs text-center mt-2 hidden"></p>
     </div>
   </div>
@@ -116,203 +79,129 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
     import { getFirestore, collection, addDoc, serverTimestamp, query, where, getDocs, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-    const app = initializeApp({
-      apiKey: "AIzaSyApUdfMEqxZDdj86j_U3h1u6Rj70blQeuM", authDomain: "tempo-personel.firebaseapp.com",
-      projectId: "tempo-personel", storageBucket: "tempo-personel.firebasestorage.app",
-      messagingSenderId: "799482514096", appId: "1:799482514096:web:d7bf38e355defe00e24975"
-    });
+    const app = initializeApp({ apiKey: "AIzaSyApUdfMEqxZDdj86j_U3h1u6Rj70blQeuM", authDomain: "tempo-personel.firebaseapp.com", projectId: "tempo-personel", storageBucket: "tempo-personel.firebasestorage.app", messagingSenderId: "799482514096", appId: "1:799482514096:web:d7bf38e355defe00e24975" });
     const db = getFirestore(app);
 
-    let aktifKullanici = null;
-    let mevcutDurum = "İşten Çıkış"; // Varsayılan durum
-    let taleplerimDinleyici = null;
-    let personelDinleyici = null;
-    let gpsZorunluMu = true;
+    let aktifKullanici = null; let mevcutDurum = "İşten Çıkış"; let personelDinleyici = null; let gpsZorunluMu = true; let bugunIzinliMi = false; let bugunGorevliMi = false;
 
-    // Sistem Ayarları (GPS Bypass)
-    onSnapshot(doc(db, "ayarlar", "sistem"), (docSnap) => { if(docSnap.exists()) gpsZorunluMu = docSnap.data().gpsZorunlu; });
+    onSnapshot(doc(db, "ayarlar", "sistem"), (snap) => { if(snap.exists()) gpsZorunluMu = snap.data().gpsZorunlu; });
 
-    // OTURUM KONTROL (Eski hatalı çerezleri temizlemek için eklenti yapıldı)
     function oturumKontrol() {
-      const kayitliOturum = localStorage.getItem("tempoSession");
-      if(kayitliOturum) {
-        aktifKullanici = JSON.parse(kayitliOturum);
-        if(!aktifKullanici.docId) { // Eski sürüm çerezi varsa temizle
-           localStorage.removeItem("tempoSession"); window.location.reload(); return; 
-        }
-        document.getElementById("giris-ekrani").classList.add("hidden");
-        document.getElementById("yoklama-ekrani").classList.remove("hidden");
+      const s = localStorage.getItem("tempoSession");
+      if(s) {
+        aktifKullanici = JSON.parse(s);
+        if(!aktifKullanici.docId) { localStorage.removeItem("tempoSession"); window.location.reload(); return; }
+        document.getElementById("giris-ekrani").classList.add("hidden"); document.getElementById("yoklama-ekrani").classList.remove("hidden");
         document.getElementById("kullanici-bilgisi").innerText = aktifKullanici.adSoyad;
-        talepleriGetir(aktifKullanici.adSoyad);
-        personelDinleyicisiBaslat(aktifKullanici.docId);
-      } else {
-        document.getElementById("giris-ekrani").classList.remove("hidden");
-        document.getElementById("yoklama-ekrani").classList.add("hidden");
-      }
+        personelDinleyicisiBaslat(aktifKullanici.docId); izinleriDinle();
+      } else { document.getElementById("giris-ekrani").classList.remove("hidden"); document.getElementById("yoklama-ekrani").classList.add("hidden"); }
     }
     oturumKontrol();
 
-    // AKILLI BUTON YÖNETİCİSİ (18:30 KONTROLÜ DAHİL)
-    function butonlariAyarla(durum) {
-      mevcutDurum = durum || "İşten Çıkış";
-      document.getElementById("btn-group-giris").classList.add("hidden");
-      document.getElementById("btn-group-mesai").classList.add("hidden");
-      document.getElementById("btn-group-izin").classList.add("hidden");
-      document.getElementById("uyari-1830").classList.add("hidden");
-
-      const simdi = new Date();
-      const gecti1830 = (simdi.getHours() > 18) || (simdi.getHours() === 18 && simdi.getMinutes() >= 30);
-
-      if (mevcutDurum === "İşten Çıkış") {
-        document.getElementById("btn-group-giris").classList.remove("hidden");
-      } else if (mevcutDurum === "İşe Giriş" || mevcutDurum === "İzin Dönüşü") {
-        document.getElementById("btn-group-mesai").classList.remove("hidden");
-      } else if (mevcutDurum === "İzin Çıkışı") {
-        document.getElementById("btn-group-izin").classList.remove("hidden");
-        if(gecti1830) document.getElementById("uyari-1830").classList.remove("hidden");
-      }
+    function butonlariAyarla() {
+      const bGiris = document.getElementById("btn-ise-giris"); const bCikis = document.getElementById("btn-isten-cikis"); const bIzCikis = document.getElementById("btn-izin-cikis"); const bIzDonus = document.getElementById("btn-izin-donus"); const bGrCikis = document.getElementById("btn-gorev-cikis"); const bGrDonus = document.getElementById("btn-gorev-donus");
+      [bGiris, bCikis, bIzCikis, bIzDonus, bGrCikis, bGrDonus].forEach(b => { b.classList.add("disabled"); b.classList.remove("hover:bg-purple-500/20", "hover:bg-teal-500/20", "cursor-pointer"); });
+      
+      if (mevcutDurum === "İşten Çıkış" || mevcutDurum === undefined) { bGiris.classList.remove("disabled"); } 
+      else if (mevcutDurum === "İşe Giriş" || mevcutDurum === "İzin Dönüşü" || mevcutDurum === "Görev Dönüşü") {
+        bCikis.classList.remove("disabled");
+        if(bugunIzinliMi) { bIzCikis.classList.remove("disabled"); document.getElementById("kilit-izin").classList.add("hidden"); bIzCikis.classList.add("hover:bg-purple-500/20", "cursor-pointer"); } else { document.getElementById("kilit-izin").classList.remove("hidden"); }
+        if(bugunGorevliMi) { bGrCikis.classList.remove("disabled"); document.getElementById("kilit-gorev").classList.add("hidden"); bGrCikis.classList.add("hover:bg-teal-500/20", "cursor-pointer"); } else { document.getElementById("kilit-gorev").classList.remove("hidden"); }
+      } 
+      else if (mevcutDurum === "İzin Çıkışı") { bIzDonus.classList.remove("disabled"); } else if (mevcutDurum === "Görev Çıkışı") { bGrDonus.classList.remove("disabled"); }
     }
 
-    // PERSONELİN KENDİ VERİTABANINI DİNLEMESİ (Durumu anlık güncellemek için)
     function personelDinleyicisiBaslat(docId) {
-      if(personelDinleyici) personelDinleyici(); // Eskisi varsa kapat
+      if(personelDinleyici) personelDinleyici();
       personelDinleyici = onSnapshot(doc(db, "personeller", docId), (docSnap) => {
-        if(!docSnap.exists() || docSnap.data().aktifMi === false) {
-          // İK Çıkış Verdiyse sistemden at!
-          document.getElementById("cikis-yap-btn").click(); return;
-        }
-        butonlariAyarla(docSnap.data().sonDurum);
+        if(!docSnap.exists() || docSnap.data().aktifMi === false) { document.getElementById("cikis-yap-btn").click(); return; }
+        mevcutDurum = docSnap.data().sonDurum; butonlariAyarla();
       });
     }
 
-    // SAAT BAŞI VEYA DAKİKA BAŞI EKRANI GÜNCELLE (18:30 Uyarısı için)
-    setInterval(() => { if(aktifKullanici) butonlariAyarla(mevcutDurum); }, 60000);
+    function izinleriDinle() {
+      onSnapshot(query(collection(db, "izinTalepleri"), where("kullanici", "==", aktifKullanici.adSoyad)), (snapshot) => {
+        const liste = document.getElementById("taleplerim-listesi"); liste.innerHTML = ""; bugunIzinliMi = false; bugunGorevliMi = false;
+        const bugunStr = new Date().toISOString().split('T')[0];
+        if(snapshot.empty) { liste.innerHTML = `<div class="text-zinc-500 text-xs py-2 text-center">Talep bulunamadı.</div>`; butonlariAyarla(); return; }
+        let talepler = []; snapshot.forEach(d => talepler.push(d.data())); talepler.sort((a,b) => (b.talepZamani?.seconds || 0) - (a.talepZamani?.seconds || 0));
+        talepler.forEach(t => {
+            let r = t.durum==="Onaylandı" ? "text-green-400 bg-green-500/10" : (t.durum==="Reddedildi" ? "text-red-400 bg-red-500/10" : "text-yellow-400 bg-yellow-500/10");
+            liste.innerHTML += `<div class="bg-zinc-900/50 p-3 rounded-xl mb-2 border border-zinc-800 flex justify-between items-center"><div class="flex flex-col"><span class="text-white font-bold text-xs">${t.tur}</span><span class="text-zinc-500 text-[10px] mt-0.5">${t.tarihDetay}</span></div><div class="px-2 py-1 rounded-md text-[10px] font-bold ${r}">${t.durum}</div></div>`;
+            if(t.durum === "Onaylandı" && t.tarihDetay.includes(bugunStr)) {
+                if(t.tur === "Saatlik İzin" || t.tur === "Sağlık İzni") bugunIzinliMi = true;
+                if(t.tur === "Görev İzni") bugunGorevliMi = true;
+            }
+        }); butonlariAyarla();
+      });
+    }
 
-    // GİRİŞ YAP BUTONU
     document.getElementById("giris-yap-btn").addEventListener("click", async () => {
-      const btn = document.getElementById("giris-yap-btn");
-      const kadi = document.getElementById("kadi-input").value.trim().toLowerCase();
-      const sifre = document.getElementById("sifre-input").value;
-      const hataMsj = document.getElementById("giris-hata-mesaji");
-      if(!kadi || !sifre) { hataMsj.innerText = "Eksik bilgi girdiniz."; hataMsj.classList.remove("hidden"); return; }
-      
-      btn.innerText = "Kontrol Ediliyor..."; btn.disabled = true;
+      const btn = document.getElementById("giris-yap-btn"); const k = document.getElementById("kadi-input").value.trim().toLowerCase(); const s = document.getElementById("sifre-input").value;
+      const h = document.getElementById("giris-hata-mesaji"); if(!k || !s) { h.innerText="Eksik bilgi!"; h.classList.remove("hidden"); return; }
+      btn.disabled=true; btn.innerText="Bekleyin...";
       try {
-        const snap = await getDocs(query(collection(db, "personeller"), where("kAdi", "==", kadi)));
+        const snap = await getDocs(query(collection(db, "personeller"), where("kAdi", "==", k)));
         if(snap.empty) throw new Error("Kullanıcı bulunamadı!");
-        
-        let girisBasarili = false;
-        snap.forEach(docSnap => {
-          const p = docSnap.data();
-          if(p.sifre === sifre) {
-            if(!p.aktifMi) throw new Error("Hesabınız İK tarafından pasife alınmış.");
-            girisBasarili = true;
-            // DOC ID'yi kaydediyoruz ki durumunu güncelleyebilelim
-            aktifKullanici = { docId: docSnap.id, ad: p.ad, soyad: p.soyad, kAdi: p.kAdi, adSoyad: `${p.ad} ${p.soyad}` };
-            localStorage.setItem("tempoSession", JSON.stringify(aktifKullanici));
-            oturumKontrol();
-          }
-        });
-        if(!girisBasarili) throw new Error("Şifre hatalı!");
-      } catch(e) { hataMsj.innerText = e.message; hataMsj.classList.remove("hidden"); }
-      btn.innerText = "Sisteme Giriş Yap"; btn.disabled = false;
+        let bb=false; snap.forEach(d=>{ const p=d.data(); if(p.sifre===s){ if(!p.aktifMi)throw new Error("Hesabınız pasif!"); bb=true; aktifKullanici={docId:d.id, adSoyad:`${p.ad} ${p.soyad}`, kAdi:p.kAdi}; localStorage.setItem("tempoSession",JSON.stringify(aktifKullanici)); oturumKontrol(); } });
+        if(!bb) throw new Error("Şifre hatalı!");
+      } catch(e) { h.innerText=e.message; h.classList.remove("hidden"); } btn.disabled=false; btn.innerText="Giriş Yap";
     });
+    document.getElementById("cikis-yap-btn").addEventListener("click", () => { localStorage.removeItem("tempoSession"); window.location.reload(); });
 
-    document.getElementById("cikis-yap-btn").addEventListener("click", () => {
-      localStorage.removeItem("tempoSession");
-      if(taleplerimDinleyici) taleplerimDinleyici();
-      if(personelDinleyici) personelDinleyici();
-      window.location.reload();
-    });
-
-    // MESAİ İŞLEMLERİ (AKILLI GPS BYPASS İLE)
     window.yoklamaIslemi = async (islemTuru) => {
-      const msj = document.getElementById("mesaj-alani");
-      msj.className = "text-sm text-center font-bold mb-4 block text-blue-400"; msj.innerText = "İşlem yapılıyor...";
-
-      const gecti1830 = (new Date().getHours() > 18) || (new Date().getHours() === 18 && new Date().getMinutes() >= 30);
-      const izinCikisiOzelDurum = (mevcutDurum === "İzin Çıkışı" && islemTuru === "İşten Çıkış" && gecti1830);
+      const msj = document.getElementById("mesaj-alani"); msj.className = "text-sm text-center font-bold mb-4 block text-blue-400 bg-blue-500/10"; msj.innerText = "Konum kontrol ediliyor...";
       
-      // GPS GEREKMEYEN DURUMLAR: İK kapattıysa VEYA 18:30 sonrası izinden direkt işten çıkış yapıyorsa
-      const konumSorma = (!gpsZorunluMu) || izinCikisiOzelDurum;
-
       const kayitAt = async (durum, not = "Normal") => {
         try {
-          // 1. Yoklamalara Kayıt Ekle
-          await addDoc(collection(db, "yoklamalar"), {
-            adSoyad: aktifKullanici.adSoyad, kullaniciAdi: aktifKullanici.kAdi,
-            islemZamani: serverTimestamp(), durum: durum, sistemNotu: not
-          });
-          // 2. Personelin Hafızasını (sonDurum) Güncelle
+          await addDoc(collection(db, "yoklamalar"), { adSoyad: aktifKullanici.adSoyad, kullaniciAdi: aktifKullanici.kAdi, islemZamani: serverTimestamp(), durum: durum, sistemNotu: not });
           await updateDoc(doc(db, "personeller", aktifKullanici.docId), { sonDurum: durum });
-          
-          msj.className = "text-sm text-center font-bold mb-4 block text-green-400"; msj.innerText = `${durum} Kaydedildi!`;
-          setTimeout(() => msj.classList.add("hidden"), 3000);
-        } catch (e) { msj.className = "text-sm text-center font-bold mb-4 block text-red-400"; msj.innerText = "Hata oluştu!"; }
+          msj.className = "text-sm text-center font-bold mb-4 block text-green-400 bg-green-500/10"; msj.innerText = `${durum} Onaylandı!`; setTimeout(() => msj.classList.add("hidden"), 2000);
+        } catch (e) { msj.className = "text-sm text-center font-bold mb-4 block text-red-400 bg-red-500/10"; msj.innerText = "Hata!"; }
       };
 
-      if (konumSorma) {
-        let notYazisi = !gpsZorunluMu ? "Evden Çalışma Modu (GPS Kapalı)" : "18:30 Sonrası Otomatik İşten Çıkış";
-        kayitAt(islemTuru, notYazisi);
-      } else {
+      if (!gpsZorunluMu) { kayitAt(islemTuru, "Evden Çalışma Modu"); } 
+      else {
         if ("geolocation" in navigator) {
           navigator.geolocation.getCurrentPosition((pos) => {
             const F_LAT = 38.4237; const F_LON = 27.1428; const K_METRE = 50000;
-            const R = 6371e3; const dLat = (pos.coords.latitude-F_LAT) * Math.PI/180; const dLon = (pos.coords.longitude-F_LON) * Math.PI/180;
-            const a = Math.sin(dLat/2)*Math.sin(dLat/2) + Math.cos(F_LAT*Math.PI/180)*Math.cos(pos.coords.latitude*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2);
+            const R = 6371e3; const a = Math.sin((pos.coords.latitude-F_LAT)*Math.PI/360)**2 + Math.cos(F_LAT*Math.PI/180)*Math.cos(pos.coords.latitude*Math.PI/180)*Math.sin((pos.coords.longitude-F_LON)*Math.PI/360)**2;
             if (R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))) <= K_METRE) kayitAt(islemTuru);
-            else { msj.className = "text-sm text-center font-bold mb-4 block text-red-400"; msj.innerText = "Fabrika alanında değilsiniz!"; }
-          }, () => { msj.className = "text-sm text-center font-bold mb-4 block text-red-400"; msj.innerText = "Konum alınamadı!"; });
+            else { msj.className = "text-sm text-center font-bold mb-4 block text-red-400 bg-red-500/10"; msj.innerText = "📍 Fabrika alanında değilsiniz!"; }
+          }, () => { msj.className = "text-sm text-center font-bold mb-4 block text-red-400 bg-red-500/10"; msj.innerText = "📍 Konum alınamadı! (Ayarları kontrol edin)"; });
         }
       }
     };
 
-    // İZİN FORMU MANTIĞI (Aynı)
-    const izinTuruSelect = document.getElementById("izin-turu");
-    izinTuruSelect.addEventListener("change", (e) => {
+    const iTur = document.getElementById("izin-turu");
+    iTur.addEventListener("change", (e) => {
       document.getElementById("form-saatlik").classList.add("hidden"); document.getElementById("form-gunluk").classList.add("hidden"); document.getElementById("form-rapor").classList.add("hidden");
-      if(e.target.value === "Saatlik İzin" || e.target.value === "Görev İzni") document.getElementById("form-saatlik").classList.remove("hidden");
-      if(e.target.value === "Günlük İzin (Yıllık)" || e.target.value === "Sağlık İzni") document.getElementById("form-gunluk").classList.remove("hidden");
-      if(e.target.value === "Sağlık İzni") document.getElementById("form-rapor").classList.remove("hidden");
+      if(e.target.value.includes("Saatlik") || e.target.value.includes("Görev")) document.getElementById("form-saatlik").classList.remove("hidden");
+      if(e.target.value.includes("Günlük") || e.target.value.includes("Sağlık")) document.getElementById("form-gunluk").classList.remove("hidden");
+      if(e.target.value.includes("Sağlık")) document.getElementById("form-rapor").classList.remove("hidden");
     });
-    
     document.getElementById("izin-menu-ac-btn").addEventListener("click", () => document.getElementById("izin-ekrani").classList.remove("hidden"));
     document.getElementById("izin-kapat-btn").addEventListener("click", () => document.getElementById("izin-ekrani").classList.add("hidden"));
 
     document.getElementById("izin-gonder-btn").addEventListener("click", async () => {
       const btn = document.getElementById("izin-gonder-btn"); const msj = document.getElementById("izin-mesaj");
-      const tur = izinTuruSelect.value; const sebep = document.getElementById("izin-sebep").value; let detayStr = "";
-      if (tur === "Saatlik İzin" || tur === "Görev İzni") {
+      let tur = iTur.value; let sebep = document.getElementById("izin-sebep").value; let detayStr = "";
+      if (tur.includes("Saatlik") || tur.includes("Görev")) {
         const trh = document.getElementById("saat-tarih").value; const bs = document.getElementById("saat-basla").value; const bt = document.getElementById("saat-bitis").value;
-        if(!trh || !bs || !bt) { msj.innerText = "Saat bilgilerini girin!"; msj.className = "text-xs text-center mt-2 text-red-400 block"; return; }
-        detayStr = `${trh} | ${bs} - ${bt} arası`;
+        if(!trh||!bs||!bt){ msj.innerText="Eksik tarih/saat!"; msj.className="text-xs text-center mt-2 text-red-400 block"; return;}
+        detayStr = `${trh} | ${bs} - ${bt}`;
       } else {
         const bs = document.getElementById("gun-basla").value; const bt = document.getElementById("gun-bitis").value;
-        if(!bs || !bt) { msj.innerText = "Tarih bilgilerini girin!"; msj.className = "text-xs text-center mt-2 text-red-400 block"; return; }
-        detayStr = `${bs} ile ${bt} arası`;
-        if (tur === "Sağlık İzni") detayStr += ` (${document.querySelector('input[name="rapor"]:checked').value})`;
+        if(!bs||!bt){ msj.innerText="Eksik tarih!"; msj.className="text-xs text-center mt-2 text-red-400 block"; return;}
+        detayStr = `${bs} ile ${bt}`;
+        if(tur.includes("Sağlık")) detayStr += ` (${document.querySelector('input[name="rapor"]:checked').value})`;
       }
-
-      btn.disabled = true; btn.innerText = "Gönderiliyor...";
+      btn.disabled=true; btn.innerText="Gönderiliyor...";
       try {
         await addDoc(collection(db, "izinTalepleri"), { kullanici: aktifKullanici.adSoyad, tur: tur, tarihDetay: detayStr, sebep: sebep, durum: "Onay Bekliyor", talepZamani: serverTimestamp() });
-        msj.innerText = "İletildi!"; msj.className = "text-xs text-center mt-2 text-green-400 block";
-        setTimeout(() => { document.getElementById("izin-kapat-btn").click(); btn.disabled = false; btn.innerText = "Talebi Gönder"; msj.classList.add("hidden"); }, 1500);
-      } catch (e) { btn.disabled = false; btn.innerText = "Hata!"; }
+        msj.innerText="İletildi!"; msj.className="text-xs text-center mt-2 text-green-400 block"; setTimeout(()=> {document.getElementById("izin-kapat-btn").click(); btn.disabled=false; btn.innerText="Talebi Onaya Gönder"; msj.classList.add("hidden"); }, 1500);
+      } catch(e) { btn.disabled=false; btn.innerText="Hata!"; }
     });
-
-    function talepleriGetir(adSoyad) {
-      taleplerimDinleyici = onSnapshot(query(collection(db, "izinTalepleri"), where("kullanici", "==", adSoyad)), (snapshot) => {
-        const liste = document.getElementById("taleplerim-listesi"); liste.innerHTML = "";
-        if(snapshot.empty) { liste.innerHTML = `<div class="text-zinc-600 py-2">Talebiniz yok.</div>`; return; }
-        let talepler = []; snapshot.forEach(d => talepler.push(d.data()));
-        talepler.sort((a,b) => (b.talepZamani?.seconds || 0) - (a.talepZamani?.seconds || 0));
-        talepler.forEach(t => {
-            let renk = t.durum === "Onaylandı" ? "text-green-400" : (t.durum === "Reddedildi" ? "text-red-400" : "text-yellow-400");
-            liste.innerHTML += `<div class="bg-zinc-800/50 p-2 rounded mb-2 border border-zinc-700/50 flex justify-between items-center"><div><span class="text-zinc-300 font-bold">${t.tur}</span><br><span class="text-zinc-500">${t.tarihDetay}</span></div><div class="font-bold ${renk}">${t.durum}</div></div>`;
-        });
-      });
-    }
   </script>
 </body>
 </html>
