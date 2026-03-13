@@ -5,10 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tempo Team - İK Paneli</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script>
-    tailwind.config = { theme: { extend: { colors: { brand: '#e6007e', limey: '#a3e635' } } } }
+    tailwind.config = {
+      theme: { extend: { colors: { brand: '#e6007e', limey: '#a3e635' } } }
+    }
   </script>
   <style>
     body { font-family: 'Barlow Condensed', sans-serif; background-color: #09090b; color: #e4e4e7; }
@@ -17,6 +20,7 @@
     input:focus, select:focus { border-color: #e6007e; }
     .toggle-checkbox:checked { right: 0; border-color: #a3e635; }
     .toggle-checkbox:checked + .toggle-label { background-color: #a3e635; }
+    
     .nav-btn { display: flex; align-items: center; gap: 0.375rem; padding: 0.5rem 0.875rem; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 500; transition: all 0.2s; white-space: nowrap; width: 100%; justify-content: start; }
     @media (min-width: 768px) { .nav-btn { width: auto; justify-content: center; } }
     .nav-btn-active { background-color: #e6007e; color: white; font-weight: 600; box-shadow: 0 0 10px rgba(230,0,126,0.3); }
@@ -40,12 +44,12 @@
         </button>
 
         <div class="hidden md:flex gap-2 items-center">
-          <button onclick="sekmeDegistir('canli')" id="btn-canli-desktop" class="nav-btn nav-btn-active"><svg class="svg-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> Canlı Saha</button>
+          <button onclick="sekmeDegistir('canli')" id="btn-canli-desktop" class="nav-btn nav-btn-active"><svg class="svg-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg> Canlı Saha</button>
           <button onclick="sekmeDegistir('izin')" id="btn-izin-desktop" class="nav-btn nav-btn-inactive relative"><svg class="svg-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> İzinler <span class="izin-bildirim absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full hidden">0</span></button>
           <button onclick="sekmeDegistir('manuel')" id="btn-manuel-desktop" class="nav-btn nav-btn-inactive"><svg class="svg-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg> Manuel İşlemler</button>
           <button onclick="sekmeDegistir('personel')" id="btn-personel-desktop" class="nav-btn nav-btn-inactive"><svg class="svg-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg> Personel</button>
           <button onclick="sekmeDegistir('rapor')" id="btn-rapor-desktop" class="nav-btn nav-btn-inactive"><svg class="svg-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg> Raporlar</button>
-          <button onclick="sekmeDegistir('ayarlar')" id="btn-ayarlar-desktop" class="nav-btn nav-btn-inactive"><svg class="svg-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065z"></path></svg> Ayarlar</button>
+          <button onclick="sekmeDegistir('ayarlar')" id="btn-ayarlar-desktop" class="nav-btn nav-btn-inactive"><svg class="svg-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> Ayarlar</button>
         </div>
       </div>
       
@@ -54,7 +58,7 @@
           <button onclick="sekmeDegistir('izin')" id="btn-izin-mobile" class="nav-btn nav-btn-inactive flex justify-between">İzin Talepleri <span class="izin-bildirim bg-red-500 text-white text-[10px] font-bold px-2 rounded-full hidden">0</span></button>
           <button onclick="sekmeDegistir('manuel')" id="btn-manuel-mobile" class="nav-btn nav-btn-inactive">Manuel İşlemler</button>
           <button onclick="sekmeDegistir('personel')" id="btn-personel-mobile" class="nav-btn nav-btn-inactive">Personel Yönetimi</button>
-          <button onclick="sekmeDegistir('rapor')" id="btn-rapor-mobile" class="nav-btn nav-btn-inactive">Raporlar (Excel Çıktısı)</button>
+          <button onclick="sekmeDegistir('rapor')" id="btn-rapor-mobile" class="nav-btn nav-btn-inactive">Raporlar</button>
           <button onclick="sekmeDegistir('ayarlar')" id="btn-ayarlar-mobile" class="nav-btn nav-btn-inactive">Ayarlar</button>
       </div>
     </div>
@@ -80,38 +84,89 @@
     </div>
 
     <div id="sekme-rapor" class="hidden space-y-6">
-      
       <div class="glass-panel p-5 md:p-8 rounded-xl shadow-lg border-t-4 border-blue-500">
-        <h2 class="text-xl md:text-2xl font-bold text-white mb-2">Gelişmiş Raporlama & Puantaj</h2>
-        <p class="text-xs text-zinc-400 mb-6">Personellerin tüm giriş, çıkış ve izin hareketlerini hesaplayıp tek bir dosyaya döker.</p>
+        <h2 class="text-xl md:text-2xl font-bold text-white mb-2">Aylık Personel Karnesi (Puantaj)</h2>
+        <p class="text-xs text-zinc-400 mb-6">Seçtiğiniz personelin tüm hareketlerini (Hafta İçi 08:30 - 18:30) inceler ve otomatik eksik/fazla mesai hesaplar.</p>
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div><label class="text-sm text-zinc-400 font-medium block mb-1">Başlangıç Tarihi</label><input type="date" id="rapor-basla" class="w-full p-2.5 rounded-lg text-sm"></div>
-          <div><label class="text-sm text-zinc-400 font-medium block mb-1">Bitiş Tarihi</label><input type="date" id="rapor-bitis" class="w-full p-2.5 rounded-lg text-sm"></div>
-          <div class="flex items-end"><button id="btn-rapor-getir" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm py-2.5 rounded-lg transition shadow-lg flex justify-center items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg> Verileri Hesapla</button></div>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <div>
+            <label class="text-sm text-zinc-400 font-medium block mb-1">Personel:</label>
+            <select id="filtre-personel" class="w-full p-2.5 rounded-lg text-sm bg-zinc-900 border-zinc-700 text-white">
+              <option value="HEPSI">-- Personel Seç --</option>
+            </select>
+          </div>
+          <div class="md:col-span-2">
+            <label class="text-sm text-zinc-400 font-medium block mb-1">Ay / Yıl Seçin:</label>
+            <select id="filtre-ay" class="w-full p-2.5 rounded-lg text-sm bg-zinc-900 border-zinc-700 text-white">
+              <optgroup label="2026">
+                <option value="0" data-yil="2026">Ocak 2026</option>
+                <option value="1" data-yil="2026">Şubat 2026</option>
+                <option value="2" data-yil="2026" selected>Mart 2026</option>
+                <option value="3" data-yil="2026">Nisan 2026</option>
+                <option value="4" data-yil="2026">Mayıs 2026</option>
+                <option value="5" data-yil="2026">Haziran 2026</option>
+                <option value="6" data-yil="2026">Temmuz 2026</option>
+                <option value="7" data-yil="2026">Ağustos 2026</option>
+                <option value="8" data-yil="2026">Eylül 2026</option>
+                <option value="9" data-yil="2026">Ekim 2026</option>
+                <option value="10" data-yil="2026">Kasım 2026</option>
+                <option value="11" data-yil="2026">Aralık 2026</option>
+              </optgroup>
+              <optgroup label="2025">
+                <option value="0" data-yil="2025">Ocak 2025</option>
+                <option value="1" data-yil="2025">Şubat 2025</option>
+                <option value="2" data-yil="2025">Mart 2025</option>
+                <option value="3" data-yil="2025">Nisan 2025</option>
+                <option value="4" data-yil="2025">Mayıs 2025</option>
+                <option value="5" data-yil="2025">Haziran 2025</option>
+                <option value="6" data-yil="2025">Temmuz 2025</option>
+                <option value="7" data-yil="2025">Ağustos 2025</option>
+                <option value="8" data-yil="2025">Eylül 2025</option>
+                <option value="9" data-yil="2025">Ekim 2025</option>
+                <option value="10" data-yil="2025">Kasım 2025</option>
+                <option value="11" data-yil="2025">Aralık 2025</option>
+              </optgroup>
+            </select>
+          </div>
+          <div class="flex items-end">
+            <button id="raporla-btn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm py-2.5 rounded-lg transition shadow-lg flex justify-center items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg> Analiz Et
+            </button>
+          </div>
         </div>
+      </div>
+
+      <div id="ozet-kartlar" class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8 hidden">
+        <div class="glass-panel p-4 rounded-xl border-l-4 border-zinc-500 bg-zinc-900/50"><p class="text-[10px] text-zinc-400 font-bold uppercase">Toplam İş Günü</p><h3 id="stat-isgunu" class="text-2xl font-black text-white">0</h3></div>
+        <div class="glass-panel p-4 rounded-xl border-l-4 border-blue-500 bg-blue-900/10"><p class="text-[10px] text-zinc-400 font-bold uppercase">Geldiği Gün</p><h3 id="stat-gun" class="text-2xl font-black text-blue-400">0</h3></div>
+        <div class="glass-panel p-4 rounded-xl border-l-4 border-red-500 bg-red-900/10"><p class="text-[10px] text-zinc-400 font-bold uppercase">Devamsız / Eksik</p><h3 id="stat-eksik" class="text-2xl font-black text-red-400">0</h3></div>
+        <div class="glass-panel p-4 rounded-xl border-l-4 border-orange-500 bg-orange-900/10"><p class="text-[10px] text-zinc-400 font-bold uppercase">İzinli Gün</p><h3 id="stat-izinli" class="text-2xl font-black text-orange-400">0</h3></div>
+        <div class="glass-panel p-4 rounded-xl border-l-4 border-fuchsia-500 bg-fuchsia-900/10"><p class="text-[10px] text-zinc-400 font-bold uppercase">Kalan Yıllık İzin</p><h3 id="stat-yillik-izin" class="text-2xl font-black text-fuchsia-400">0</h3></div>
       </div>
 
       <div id="rapor-sonuclari-alani" class="glass-panel rounded-xl overflow-hidden hidden">
         <div class="p-4 border-b border-zinc-800 bg-zinc-900/50 flex justify-between items-center">
-            <h2 class="text-lg font-bold text-white">Hesaplanan Puantaj Verileri</h2>
-            <button id="btn-excel-indir" class="bg-green-600 hover:bg-green-500 text-white font-bold text-sm px-4 py-2 rounded-lg transition shadow-lg flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg> Excel (XLSX) Olarak İndir</button>
+            <h2 class="text-lg font-bold text-brand">Puantaj Detayları</h2>
+            <button id="excel-indir-btn" class="bg-green-600 hover:bg-green-500 text-white font-bold text-sm px-4 py-2 rounded-lg transition shadow-lg flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg> Excel (XLSX) İndir
+            </button>
         </div>
         <div class="overflow-x-auto w-full block max-h-[500px]">
           <table class="w-full text-left text-sm font-normal whitespace-nowrap">
-            <thead class="bg-zinc-900 text-zinc-400 text-xs font-semibold uppercase border-b border-zinc-800 sticky top-0">
-              <tr><th class="px-4 py-3">Tarih</th><th class="px-4 py-3">Personel</th><th class="px-4 py-3 text-green-400">İlk Giriş</th><th class="px-4 py-3 text-red-400">Son Çıkış</th><th class="px-4 py-3 text-orange-400">Saatlik İzinler</th><th class="px-4 py-3 text-white">Net Süre</th><th class="px-4 py-3 text-blue-400">Tam Gün Durumu</th></tr>
+            <thead class="bg-zinc-900 text-zinc-400 text-[11px] font-semibold uppercase border-b border-zinc-800 sticky top-0">
+              <tr>
+                <th class="px-4 py-3">Tarih</th>
+                <th class="px-4 py-3">İlk Giriş</th>
+                <th class="px-4 py-3">Son Çıkış</th>
+                <th class="px-4 py-3">Eksik Süre</th>
+                <th class="px-4 py-3">Fazla Mesai</th>
+                <th class="px-4 py-3">Net Çalışma</th>
+                <th class="px-4 py-3">Durum</th>
+              </tr>
             </thead>
-            <tbody id="rapor-tablo-govdesi" class="divide-y divide-zinc-800/50"></tbody>
+            <tbody id="tablo-govdesi" class="divide-y divide-zinc-800/50"></tbody>
           </table>
         </div>
-      </div>
-
-      <div class="mt-12 p-6 border border-fuchsia-600/30 bg-fuchsia-900/10 rounded-xl text-center">
-          <h3 class="text-fuchsia-500 font-bold mb-2">🧪 Geliştirici Araçları</h3>
-          <p class="text-xs text-zinc-400 mb-4">Sistemin nasıl çalıştığını görmek için son 2.5 ayın (Ahmet ve Mehmet) giriş-çıkış verilerini otomatik oluşturur.</p>
-          <button id="btn-simulasyon" class="bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-bold text-sm px-6 py-3 rounded-lg transition shadow-[0_0_15px_rgba(192,38,211,0.4)]">Simülasyonu Başlat (150+ Kayıt Ekle)</button>
-          <p id="simulasyon-mesaj" class="text-sm font-bold mt-3 hidden text-limey"></p>
       </div>
     </div>
     
@@ -155,7 +210,7 @@
             </select>
           </div>
           <div><label class="text-zinc-400 font-medium block mb-1">Tarih</label><input type="date" id="m-tarih" class="w-full p-2.5 rounded-lg"></div>
-          <div><label class="text-zinc-400 font-medium block mb-1">Saat <span class="text-[10px] text-zinc-500">(Tam gün için 08:00)</span></label><input type="time" id="m-saat" class="w-full p-2.5 rounded-lg" value="08:00"></div>
+          <div><label class="text-zinc-400 font-medium block mb-1">Saat <span class="text-[10px] text-zinc-500">(Tam gün için 08:30)</span></label><input type="time" id="m-saat" class="w-full p-2.5 rounded-lg" value="08:30"></div>
           <div class="md:col-span-2"><label class="text-zinc-400 font-medium block mb-1">Açıklama / Sebep</label><input type="text" id="m-sebep" class="w-full p-2.5 rounded-lg"></div>
         </div>
         <button id="manuel-kaydet-btn" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-semibold text-base py-3 rounded-lg mt-5 shadow-lg transition">Sisteme İşle</button>
@@ -212,12 +267,16 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, onSnapshot, doc, setDoc, updateDoc, query, Timestamp, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, onSnapshot, doc, setDoc, updateDoc, query, where, getDocs, Timestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
     const app = initializeApp({ apiKey: "AIzaSyApUdfMEqxZDdj86j_U3h1u6Rj70blQeuM", authDomain: "tempo-personel.firebaseapp.com", projectId: "tempo-personel", storageBucket: "tempo-personel.firebasestorage.app", messagingSenderId: "799482514096", appId: "1:799482514096:web:d7bf38e355defe00e24975" });
     const db = getFirestore(app);
 
-    document.getElementById('mobile-menu-btn').addEventListener('click', () => { document.getElementById('mobile-nav').classList.toggle('hidden'); document.getElementById('mobile-nav').classList.toggle('flex'); });
+    // Sekme Yöneticisi
+    document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+        document.getElementById('mobile-nav').classList.toggle('hidden');
+        document.getElementById('mobile-nav').classList.toggle('flex');
+    });
 
     window.sekmeDegistir = (sekmeId) => {
       ['canli', 'rapor', 'izin', 'personel', 'ayarlar', 'manuel'].forEach(id => {
@@ -236,17 +295,54 @@
     document.getElementById("canli-tarih").innerText = new Date().toLocaleDateString('tr-TR', ops);
     const bugunStr = new Date().toISOString().split('T')[0];
 
+    // MÜKEMMEL YILLIK İZİN HESAPLAMA MOTORU (Senin Kurallarınla)
+    function yillikIzinHesapla(dogumTarihi, iseGirisTarihi) {
+        if(!dogumTarihi || !iseGirisTarihi) return 0;
+        const bugun = new Date();
+        const dogum = new Date(dogumTarihi);
+        const giris = new Date(iseGirisTarihi);
+
+        let yas = bugun.getFullYear() - dogum.getFullYear();
+        if (bugun.getMonth() < dogum.getMonth() || (bugun.getMonth() === dogum.getMonth() && bugun.getDate() < dogum.getDate())) yas--;
+
+        let calismaYili = bugun.getFullYear() - giris.getFullYear();
+        if (bugun.getMonth() < giris.getMonth() || (bugun.getMonth() === giris.getMonth() && bugun.getDate() < giris.getDate())) calismaYili--;
+
+        let hakedis = 0;
+        if (calismaYili >= 1 && calismaYili <= 5) hakedis = 14;
+        else if (calismaYili > 5 && calismaYili <= 15) hakedis = 20;
+        else if (calismaYili > 15) hakedis = 26;
+
+        // 18 yaş altı veya 50 yaş üstü ise +4 gün kuralı
+        if (hakedis > 0 && (yas < 18 || yas > 50)) hakedis += 4;
+        
+        return hakedis;
+    }
+
+    // Dakika Çevirme (Saat ve Dakika Olarak)
+    function dakikaCevir(dakika) { 
+        if(dakika <= 0) return "0s 0d";
+        const s = Math.floor(dakika / 60); 
+        const d = Math.round(dakika % 60); 
+        return `${s} Saat ${d} Dk`; 
+    }
+
     let aktifPersonelListesi = []; let bugunkuIzinler = []; let duzenlenenPersonelId = null;
     
-    // TABLOLARI DİNLEME
+    // PERSONEL LİSTESİ DİNLEME
     onSnapshot(collection(db, "personeller"), (snapshot) => {
       const tablo = document.getElementById("personel-tablosu"); tablo.innerHTML = "";
       const dropdownP = document.getElementById("m-personel"); dropdownP.innerHTML = `<option value="">-- Personel Seç --</option>`;
+      const dropdownR = document.getElementById("filtre-personel"); dropdownR.innerHTML = `<option value="HEPSI">-- Personel Seç --</option>`;
       aktifPersonelListesi = [];
       if(!snapshot.empty) {
         snapshot.forEach(docSnap => {
           const p = docSnap.data(); const adSoyad = `${p.ad} ${p.soyad}`;
-          if(p.aktifMi) { aktifPersonelListesi.push({ id: docSnap.id, adSoyad: adSoyad, kAdi: p.kAdi, data: p }); dropdownP.innerHTML += `<option value="${docSnap.id}">${adSoyad}</option>`; }
+          if(p.aktifMi) { 
+              aktifPersonelListesi.push({ id: docSnap.id, adSoyad: adSoyad, kAdi: p.kAdi, data: p }); 
+              dropdownP.innerHTML += `<option value="${docSnap.id}">${adSoyad}</option>`; 
+              dropdownR.innerHTML += `<option value="${docSnap.id}">${adSoyad}</option>`; 
+          }
           const islem = p.aktifMi ? `<button onclick="personelDuzenleAc('${docSnap.id}')" class="text-blue-400 text-sm font-medium hover:underline">✎ Düzenle</button>` : `<span class="text-zinc-600 text-sm font-medium">Pasif</span>`;
           tablo.innerHTML += `<tr class="border-b border-zinc-800/50 hover:bg-zinc-800/30 transition"><td class="px-4 py-3 font-bold text-white">${adSoyad}</td><td class="px-4 py-3 font-mono text-brand text-sm font-semibold">${p.kAdi} <br><span class="text-zinc-500 font-normal text-xs">Şifre: ${p.sifre}</span></td><td class="px-4 py-3">${p.aktifMi ? `<span class="bg-lime-500/20 text-limey px-2 py-1 rounded font-semibold text-xs">Aktif</span>` : `<span class="bg-red-500/20 text-red-400 px-2 py-1 rounded font-semibold text-xs">Ayrıldı</span>`}</td><td class="px-4 py-3 text-right">${islem}</td></tr>`;
         });
@@ -262,11 +358,13 @@
           tumIzinTablo.innerHTML = `<tr><td colspan="3" class="px-4 py-8 text-center text-zinc-500 text-sm">Kayıt bulunamadı.</td></tr>`;
           document.querySelectorAll(".izin-bildirim").forEach(el => el.classList.add("hidden")); return; 
       }
+      
       let talepler = []; snap.forEach(d => talepler.push({id: d.id, ...d.data()}));
       talepler.sort((a,b) => (b.talepZamani?.seconds || 0) - (a.talepZamani?.seconds || 0));
 
       talepler.forEach(v => {
         if(v.durum === "Onaylandı" && v.tarihDetay.includes(bugunStr)) { bugunkuIzinler.push(v); }
+
         if(v.durum === "Onay Bekliyor") {
             bekleyenSayisi++;
             const onayBtn = `<button onclick="izinModalAc('${v.id}', '${v.kullanici}', '${v.tur}')" class="bg-lime-600/20 text-limey border border-lime-600/50 hover:bg-lime-600 hover:text-white px-3 py-1 rounded transition text-xs font-bold mr-2">✓ Onay</button>`;
@@ -277,226 +375,330 @@
             tumIzinTablo.innerHTML += `<tr class="border-b border-zinc-800/50 hover:bg-zinc-800/30 transition"><td class="px-4 py-3 text-white font-bold">${v.kullanici}</td><td class="px-4 py-3 text-zinc-300 font-medium">${v.tur} <br><span class="text-zinc-500 text-xs font-light">${v.tarihDetay}</span></td><td class="px-4 py-3 text-sm">${durumRozet}<br><span class="text-zinc-500 font-medium text-xs">${v.kesintiTuru || '-'}</span></td></tr>`;
         }
       });
-      if(bekleyenSayisi > 0) { document.querySelectorAll(".izin-bildirim").forEach(el => { el.innerText = bekleyenSayisi; el.classList.remove("hidden"); el.classList.add("flex"); }); } 
-      else { document.querySelectorAll(".izin-bildirim").forEach(el => { el.classList.add("hidden"); el.classList.remove("flex"); }); izinTablo.innerHTML = `<tr><td colspan="4" class="px-4 py-8 text-center text-zinc-500 text-sm">Şu an onay bekleyen talep bulunmuyor.</td></tr>`; }
+
+      if(bekleyenSayisi > 0) { 
+          document.querySelectorAll(".izin-bildirim").forEach(el => { el.innerText = bekleyenSayisi; el.classList.remove("hidden"); el.classList.add("flex"); }); 
+      } else { 
+          document.querySelectorAll(".izin-bildirim").forEach(el => { el.classList.add("hidden"); el.classList.remove("flex"); }); 
+          izinTablo.innerHTML = `<tr><td colspan="4" class="px-4 py-8 text-center text-zinc-500 text-sm">Şu an onay bekleyen talep bulunmuyor.</td></tr>`; 
+      }
       canliTakipGuncelle();
     });
 
     function canliTakipGuncelle() {
         const grid = document.getElementById("canli-grid"); grid.innerHTML = "";
         if(aktifPersonelListesi.length === 0) { grid.innerHTML = `<div class="text-center text-sm text-zinc-500 col-span-full py-10">Kayıtlı aktif personel yok.</div>`; return; }
+
         aktifPersonelListesi.forEach(p => {
-            let sDurum = p.data.sonDurum; let renk = "bg-zinc-800 border-zinc-600"; let yaziRenk = "text-zinc-400"; let detay = sDurum; let ikonSvg = '';
+            let sDurum = p.data.sonDurum;
+            let renk = "bg-zinc-800 border-zinc-600"; let yaziRenk = "text-zinc-400"; let detay = sDurum; let ikonSvg = '';
+            
             const bugunIzinliMi = bugunkuIzinler.find(i => i.kullanici === p.adSoyad && (i.tur.includes("Günlük") || i.tur.includes("Sağlık") || i.tur.includes("Tam Gün")));
-            if((sDurum && sDurum.includes("Tam Gün")) || bugunIzinliMi) { renk = "bg-brand/20 border-brand"; yaziRenk = "text-brand"; ikonSvg = `<svg class="w-7 h-7 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>`; detay = bugunIzinliMi ? "Tüm Gün: " + bugunIzinliMi.tur : sDurum; }
-            else {
-                if(!sDurum || sDurum === "İşten Çıkış") { renk = "bg-zinc-900 border-zinc-700 opacity-60"; yaziRenk = "text-zinc-500"; ikonSvg = `<svg class="w-7 h-7 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>`; detay = "Fabrika Dışında"; } 
-                else if(sDurum === "İşe Giriş" || sDurum === "İzin Dönüşü" || sDurum === "Görev Dönüşü") { renk = "bg-lime-900/20 border-lime-500"; yaziRenk = "text-limey"; ikonSvg = `<svg class="w-7 h-7 text-limey" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>`; detay = "Fabrikada Aktif"; } 
-                else if(sDurum === "İzin Çıkışı") { renk = "bg-orange-900/20 border-orange-500"; yaziRenk = "text-orange-400"; ikonSvg = `<svg class="w-7 h-7 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`; detay = "Saatlik İzinde (Dışarıda)"; } 
-                else if(sDurum === "Görev Çıkışı") { renk = "bg-blue-900/20 border-blue-500"; yaziRenk = "text-blue-400"; ikonSvg = `<svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>`; detay = "Görevde (Dışarıda)"; }
+            
+            if((sDurum && sDurum.includes("Tam Gün")) || bugunIzinliMi) {
+                renk = "bg-brand/20 border-brand"; yaziRenk = "text-brand";
+                ikonSvg = `<svg class="w-7 h-7 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>`; 
+                detay = bugunIzinliMi ? "Tüm Gün: " + bugunIzinliMi.tur : sDurum;
             }
-            grid.innerHTML += `<div class="p-3 rounded-xl border-l-4 ${renk} flex items-center gap-3 transition-all duration-500"><div>${ikonSvg}</div><div class="overflow-hidden"><h3 class="text-sm md:text-base font-bold text-white truncate">${p.adSoyad}</h3><p class="text-xs font-medium ${yaziRenk} truncate">${detay}</p></div></div>`;
+            else {
+                if(!sDurum || sDurum === "İşten Çıkış") {
+                    renk = "bg-zinc-900 border-zinc-700 opacity-60"; yaziRenk = "text-zinc-500";
+                    ikonSvg = `<svg class="w-7 h-7 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>`; 
+                    detay = "Fabrika Dışında";
+                } else if(sDurum === "İşe Giriş" || sDurum === "İzin Dönüşü" || sDurum === "Görev Dönüşü") {
+                    renk = "bg-lime-900/20 border-lime-500"; yaziRenk = "text-limey";
+                    ikonSvg = `<svg class="w-7 h-7 text-limey" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>`; 
+                    detay = "Fabrikada Aktif";
+                } else if(sDurum === "İzin Çıkışı") {
+                    renk = "bg-orange-900/20 border-orange-500"; yaziRenk = "text-orange-400";
+                    ikonSvg = `<svg class="w-7 h-7 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`; 
+                    detay = "Saatlik İzinde (Dışarıda)";
+                } else if(sDurum === "Görev Çıkışı") {
+                    renk = "bg-blue-900/20 border-blue-500"; yaziRenk = "text-blue-400";
+                    ikonSvg = `<svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>`; 
+                    detay = "Görevde (Dışarıda)";
+                }
+            }
+
+            grid.innerHTML += `
+            <div class="p-3 rounded-xl border-l-4 ${renk} flex items-center gap-3 transition-all duration-500">
+                <div>${ikonSvg}</div>
+                <div class="overflow-hidden">
+                    <h3 class="text-sm md:text-base font-bold text-white truncate">${p.adSoyad}</h3>
+                    <p class="text-xs font-medium ${yaziRenk} truncate">${detay}</p>
+                </div>
+            </div>`;
         });
     }
 
-    // MANUEL İŞLEMLER VE PERSONEL YÖNETİMİ
-    window.personelDuzenleAc = (id) => { const p = aktifPersonelListesi.find(x => x.id === id).data; duzenlenenPersonelId = id; document.getElementById("form-baslik").innerText = "Personel Düzenle"; document.getElementById("personel-kaydet-btn").innerText = "Güncelle"; document.getElementById("p-ad").value = p.ad; document.getElementById("p-soyad").value = p.soyad; document.getElementById("p-dogum").value = p.dogum; document.getElementById("p-tel").value = p.tel; document.getElementById("p-tip").value = p.tip; document.getElementById("p-gorev").value = p.gorev; document.getElementById("p-giris").value = p.giris; document.getElementById("p-devir").value = p.devirIzin; document.getElementById("p-kadi").value = p.kAdi; document.getElementById("p-sifre").value = p.sifre; document.getElementById("personel-cikis-btn").classList.remove("hidden"); document.getElementById("yeni-personel-formu").classList.remove("hidden"); document.getElementById("yeni-personel-ac-btn").classList.add("hidden"); window.scrollTo({ top: 0, behavior: 'smooth' }); };
-    window.personelCikisVer = async () => { if(duzenlenenPersonelId && confirm("Personelin fabrikadan çıkışını yapmak istediğinize emin misiniz?")) { await updateDoc(doc(db, "personeller", duzenlenenPersonelId), { aktifMi: false, kAdi: "SİLİNDİ", sifre: "SİLİNDİ", cikisTarihi: new Date().toISOString() }); document.getElementById("form-kapat-btn").click(); } }; document.getElementById("personel-cikis-btn").addEventListener("click", personelCikisVer);
+    // YENİ! KUSURSUZ RAPORLAMA VE EXCEL MOTORU
+    document.getElementById("raporla-btn").addEventListener("click", async () => {
+        const btn = document.getElementById("raporla-btn");
+        btn.disabled = true; btn.innerText = "Hesaplanıyor...";
+        
+        const pId = document.getElementById("filtre-personel").value;
+        const aySelect = document.getElementById("filtre-ay");
+        const ay = parseInt(aySelect.value); // 0-11
+        const yil = parseInt(aySelect.options[aySelect.selectedIndex].dataset.yil);
+        
+        if (pId === "HEPSI" || !pId) {
+            alert("Lütfen detaylı puantajını çıkarmak istediğiniz personeli seçin.");
+            btn.disabled = false; btn.innerText = "Analiz Et";
+            return;
+        }
+        
+        const personelData = aktifPersonelListesi.find(p => p.id === pId).data;
+        const adSoyad = `${personelData.ad} ${personelData.soyad}`;
+        
+        // 1) Yıllık İzin Bakiye Hesaplaması
+        const hakedisGunu = yillikIzinHesapla(personelData.dogum, personelData.giris);
+        const devir = parseInt(personelData.devirIzin) || 0;
+        const toplamIzinHakki = hakedisGunu + devir;
+
+        // Onaylanmış tüm yıllık izinleri Firebase'den çek
+        const tumIzinlerSnap = await getDocs(query(collection(db, "izinTalepleri"), where("kullanici", "==", adSoyad), where("durum", "==", "Onaylandı")));
+        let kullanilanYillikIzinGun = 0;
+        tumIzinlerSnap.forEach(d => {
+            const v = d.data();
+            // Kesinti türü "Yıllık İzinden Düşülecek" olarak seçilmişse düş
+            if (v.tur.includes("Yıllık İzin") || v.kesintiTuru === "Yıllık İzinden Düşülecek") {
+                kullanilanYillikIzinGun += 1; 
+            }
+        });
+        const kalanIzin = Math.max(0, toplamIzinHakki - kullanilanYillikIzinGun);
+        
+        // 2) Günlük Yoklama ve Mesai Hesaplama
+        const gunSayisi = new Date(yil, ay + 1, 0).getDate();
+        let raporTablo = ""; let excelData = [];
+        let stats = { isGunu: 0, geldigiGun: 0, eksik: 0, izinli: 0 };
+        
+        const baslangicTarihi = new Date(yil, ay, 1);
+        const bitisTarihi = new Date(yil, ay + 1, 0, 23, 59, 59);
+        
+        const yoklamaSnap = await getDocs(query(collection(db, "yoklamalar"), 
+            where("kullaniciAdi", "==", personelData.kAdi),
+            where("islemZamani", ">=", Timestamp.fromDate(baslangicTarihi)),
+            where("islemZamani", "<=", Timestamp.fromDate(bitisTarihi))
+        ));
+        
+        let hareketler = {};
+        yoklamaSnap.forEach(d => {
+            const h = d.data(); 
+            const dateObj = h.islemZamani.toDate(); 
+            const dateStr = dateObj.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            if(!hareketler[dateStr]) hareketler[dateStr] = [];
+            hareketler[dateStr].push({ durum: h.durum, saat: dateObj });
+        });
+        
+        for (let i = 1; i <= gunSayisi; i++) {
+            const currentD = new Date(yil, ay, i);
+            const dateStr = currentD.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            const dayOfWeek = currentD.getDay();
+            // CUMARTESİ VE PAZAR ÇALIŞILMIYOR
+            const isHaftaSonu = (dayOfWeek === 0 || dayOfWeek === 6); 
+            
+            let durum = isHaftaSonu ? "Hafta Sonu" : "Gelmeye Bekleniyor";
+            let girisSaati = "-"; let cikisSaati = "-";
+            let eksikDk = 0; let fazlaDk = 0; let netCalismaDk = 0;
+            
+            if (!isHaftaSonu) stats.isGunu++;
+            
+            const gunlukHareketler = hareketler[dateStr] || [];
+            if (gunlukHareketler.length > 0) {
+                gunlukHareketler.sort((a,b) => a.saat - b.saat);
+                
+                const girisler = gunlukHareketler.filter(h => h.durum === "İşe Giriş");
+                const cikislar = gunlukHareketler.filter(h => h.durum === "İşten Çıkış");
+                const tamGunIzin = gunlukHareketler.find(h => h.durum.includes("Tam Gün"));
+                
+                if (tamGunIzin) {
+                    durum = tamGunIzin.durum;
+                    if (!isHaftaSonu) stats.izinli++;
+                } else if (girisler.length > 0) {
+                    girisSaati = girisler[0].saat.toLocaleTimeString('tr-TR', {hour: '2-digit', minute:'2-digit'});
+                    if (!isHaftaSonu) stats.geldigiGun++;
+                    
+                    if (cikislar.length > 0) {
+                        cikisSaati = cikislar[cikislar.length - 1].saat.toLocaleTimeString('tr-TR', {hour: '2-digit', minute:'2-digit'});
+                        
+                        const girisZamani = girisler[0].saat;
+                        const cikisZamani = cikislar[cikislar.length - 1].saat;
+                        
+                        // 08:30 - 18:30 MESAİ KURALI
+                        const expectedGiris = new Date(currentD); expectedGiris.setHours(8, 30, 0);
+                        const expectedCikis = new Date(currentD); expectedCikis.setHours(18, 30, 0);
+                        
+                        // Hafta sonu çalışma varsa hepsi fazla mesaidir
+                        if(isHaftaSonu) {
+                            fazlaDk += (cikisZamani - girisZamani) / 60000;
+                        } else {
+                            if (girisZamani > expectedGiris) eksikDk += (girisZamani - expectedGiris) / 60000;
+                            if (cikisZamani < expectedCikis) eksikDk += (expectedCikis - cikisZamani) / 60000;
+                            if (cikisZamani > expectedCikis) fazlaDk += (cikisZamani - expectedCikis) / 60000;
+                            if (girisZamani < expectedGiris) fazlaDk += (expectedGiris - girisZamani) / 60000;
+                        }
+                        
+                        // Gün içindeki "Saatlik İzin" vb. kesintilerini hesapla (Net çalışmadan düşer)
+                        const izCikislari = gunlukHareketler.filter(h => h.durum.includes("Çıkışı") && h.durum !== "İşten Çıkış");
+                        const izDonusleri = gunlukHareketler.filter(h => h.durum.includes("Dönüşü"));
+                        let izinDk = 0;
+                        for(let j=0; j < izCikislari.length; j++) {
+                            const c = izCikislari[j].saat;
+                            const d = izDonusleri[j] ? izDonusleri[j].saat : null;
+                            if(d) izinDk += (d - c) / 60000;
+                        }
+                        
+                        netCalismaDk = ((cikisZamani - girisZamani) / 60000) - izinDk;
+                        if(netCalismaDk < 0) netCalismaDk = 0;
+                        durum = isHaftaSonu ? "Hafta Sonu Mesaisi" : "Çalıştı";
+                    } else {
+                        durum = "Çıkış Yapmadı";
+                    }
+                }
+            } else {
+                if (!isHaftaSonu) { durum = "Devamsız"; stats.eksik++; }
+            }
+            
+            let satirClass = "";
+            if (isHaftaSonu && durum === "Hafta Sonu") satirClass = "bg-zinc-800/20 text-zinc-500";
+            else if (durum === "Devamsız" || eksikDk > 0) satirClass = "bg-red-900/10 text-red-400";
+            else if (durum === "Çalıştı" && eksikDk === 0) satirClass = "text-green-400";
+            else if (durum.includes("İzin") || durum.includes("Görev")) satirClass = "text-orange-400";
+            
+            raporTablo += `
+                <tr class="border-b border-zinc-800/50 hover:bg-zinc-800/30 transition ${satirClass}">
+                    <td class="px-4 py-3">${dateStr}</td>
+                    <td class="px-4 py-3">${girisSaati}</td>
+                    <td class="px-4 py-3">${cikisSaati}</td>
+                    <td class="px-4 py-3 font-semibold">${eksikDk > 0 ? '-' + Math.round(eksikDk) + ' dk' : '-'}</td>
+                    <td class="px-4 py-3 font-semibold">${fazlaDk > 0 ? '+' + Math.round(fazlaDk) + ' dk' : '-'}</td>
+                    <td class="px-4 py-3 font-bold">${netCalismaDk > 0 ? dakikaCevir(netCalismaDk) : '-'}</td>
+                    <td class="px-4 py-3 font-medium">${durum}</td>
+                </tr>
+            `;
+            
+            excelData.push({
+                "Tarih": dateStr,
+                "Durum": durum,
+                "Giriş Saati": girisSaati,
+                "Çıkış Saati": cikisSaati,
+                "Eksik Mesai (Dk)": eksikDk > 0 ? Math.round(eksikDk) : 0,
+                "Fazla Mesai (Dk)": fazlaDk > 0 ? Math.round(fazlaDk) : 0,
+                "Net Çalışma": netCalismaDk > 0 ? dakikaCevir(netCalismaDk) : "-"
+            });
+        }
+        
+        document.getElementById("tablo-govdesi").innerHTML = raporTablo;
+        
+        document.getElementById("stat-isgunu").innerText = stats.isGunu;
+        document.getElementById("stat-gun").innerText = stats.geldigiGun;
+        document.getElementById("stat-eksik").innerText = stats.eksik;
+        document.getElementById("stat-izinli").innerText = stats.izinli;
+        document.getElementById("stat-yillik-izin").innerText = kalanIzin + " Gün";
+        
+        document.getElementById("ozet-kartlar").classList.remove("hidden");
+        document.getElementById("rapor-sonuclari-alani").classList.remove("hidden");
+        
+        window.suAnkiExcelData = excelData;
+        window.suAnkiRaporAd = `${adSoyad.replace(/\s+/g, '_')}_${aySelect.options[aySelect.selectedIndex].text}`;
+        
+        btn.disabled = false; btn.innerText = "Analiz Et";
+    });
+
+    document.getElementById("excel-indir-btn").addEventListener("click", async () => {
+        if(!window.suAnkiExcelData || window.suAnkiExcelData.length === 0) return alert("İndirilecek veri yok.");
+        
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Puantaj');
+        
+        worksheet.columns = [
+            { header: 'Tarih', key: 'Tarih', width: 15 },
+            { header: 'Durum', key: 'Durum', width: 25 },
+            { header: 'Giriş Saati', key: 'Giriş Saati', width: 15 },
+            { header: 'Çıkış Saati', key: 'Çıkış Saati', width: 15 },
+            { header: 'Eksik Mesai (Dk)', key: 'Eksik Mesai (Dk)', width: 18 },
+            { header: 'Fazla Mesai (Dk)', key: 'Fazla Mesai (Dk)', width: 18 },
+            { header: 'Net Çalışma', key: 'Net Çalışma', width: 20 }
+        ];
+        
+        worksheet.addRows(window.suAnkiExcelData);
+        
+        worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
+        worksheet.getRow(1).fill = { type: 'pattern', pattern:'solid', fgColor:{ argb:'FF000000' } };
+
+        let totEksik = 0; let totFazla = 0;
+        window.suAnkiExcelData.forEach(r => {
+            totEksik += r['Eksik Mesai (Dk)'] || 0;
+            totFazla += r['Fazla Mesai (Dk)'] || 0;
+        });
+        
+        const totalRow = worksheet.addRow({
+            'Tarih': 'GENEL TOPLAM',
+            'Durum': '-',
+            'Giriş Saati': '-',
+            'Çıkış Saati': '-',
+            'Eksik Mesai (Dk)': totEksik,
+            'Fazla Mesai (Dk)': totFazla,
+            'Net Çalışma': '-'
+        });
+        totalRow.font = { bold: true };
+        totalRow.fill = { type: 'pattern', pattern:'solid', fgColor:{ argb:'FFFFFF00' } };
+        
+        const buffer = await workbook.xlsx.writeBuffer();
+        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        saveAs(blob, `TempoTeam_Rapor_${window.suAnkiRaporAd}.xlsx`);
+    });
+
+    // PERSONEL YÖNETİMİ, AYARLAR VE DİĞER STANDART İŞLEMLER
+    window.personelDuzenleAc = (id) => {
+        const p = aktifPersonelListesi.find(x => x.id === id).data; duzenlenenPersonelId = id;
+        document.getElementById("form-baslik").innerText = "Personel Düzenle"; document.getElementById("personel-kaydet-btn").innerText = "Güncelle";
+        document.getElementById("p-ad").value = p.ad; document.getElementById("p-soyad").value = p.soyad; document.getElementById("p-dogum").value = p.dogum; document.getElementById("p-tel").value = p.tel; document.getElementById("p-tip").value = p.tip; document.getElementById("p-gorev").value = p.gorev; document.getElementById("p-giris").value = p.giris; document.getElementById("p-devir").value = p.devirIzin; document.getElementById("p-kadi").value = p.kAdi; document.getElementById("p-sifre").value = p.sifre;
+        document.getElementById("personel-cikis-btn").classList.remove("hidden"); 
+        document.getElementById("yeni-personel-formu").classList.remove("hidden"); document.getElementById("yeni-personel-ac-btn").classList.add("hidden");
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.personelCikisVer = async () => { 
+        if(duzenlenenPersonelId && confirm("Personelin fabrikadan çıkışını yapmak istediğinize emin misiniz?")) {
+            await updateDoc(doc(db, "personeller", duzenlenenPersonelId), { aktifMi: false, kAdi: "SİLİNDİ", sifre: "SİLİNDİ", cikisTarihi: new Date().toISOString() }); 
+            document.getElementById("form-kapat-btn").click();
+        }
+    };
+    document.getElementById("personel-cikis-btn").addEventListener("click", personelCikisVer);
+
     document.getElementById("yeni-personel-ac-btn").addEventListener("click", () => { duzenlenenPersonelId = null; document.getElementById("form-baslik").innerText = "Yeni Personel Kayıt"; document.getElementById("personel-kaydet-btn").innerText = "Sisteme Kaydet"; document.querySelectorAll("#sekme-personel input").forEach(i => i.value=""); document.getElementById("p-devir").value="0"; document.getElementById("personel-cikis-btn").classList.add("hidden"); document.getElementById("yeni-personel-formu").classList.remove("hidden"); document.getElementById("yeni-personel-ac-btn").classList.add("hidden"); });
     document.getElementById("form-kapat-btn").addEventListener("click", () => { document.getElementById("yeni-personel-formu").classList.add("hidden"); document.getElementById("yeni-personel-ac-btn").classList.remove("hidden"); });
     
-    document.getElementById("personel-kaydet-btn").addEventListener("click", async () => { const msj = document.getElementById("personel-mesaj"); if(!document.getElementById("p-ad").value || !document.getElementById("p-kadi").value) { msj.innerText="Eksik bilgi!"; msj.className="text-sm font-bold text-center mt-2 text-red-400 block"; return;} const data = { ad: document.getElementById("p-ad").value.trim(), soyad: document.getElementById("p-soyad").value.trim(), dogum: document.getElementById("p-dogum").value, tel: document.getElementById("p-tel").value, tip: document.getElementById("p-tip").value, gorev: document.getElementById("p-gorev").value, giris: document.getElementById("p-giris").value, devirIzin: parseInt(document.getElementById("p-devir").value)||0, kAdi: document.getElementById("p-kadi").value.trim().toLowerCase(), sifre: document.getElementById("p-sifre").value, aktifMi: true }; try { if(duzenlenenPersonelId) { await updateDoc(doc(db, "personeller", duzenlenenPersonelId), data); } else { data.sonDurum = "İşten Çıkış"; await addDoc(collection(db, "personeller"), data); } msj.innerText="İşlem Başarılı!"; msj.className="text-sm font-bold text-center mt-2 text-limey block"; setTimeout(()=>{ document.getElementById("form-kapat-btn").click(); msj.classList.add("hidden");}, 1500); } catch(e) { msj.innerText="Hata!"; } });
-    document.getElementById("manuel-kaydet-btn").addEventListener("click", async () => { const btn = document.getElementById("manuel-kaydet-btn"); const msj = document.getElementById("manuel-mesaj"); const pId = document.getElementById("m-personel").value; const islem = document.getElementById("m-islem").value; const tarih = document.getElementById("m-tarih").value; const saat = document.getElementById("m-saat").value; const sebep = document.getElementById("m-sebep").value.trim(); if(!pId || !tarih || !saat) return; btn.disabled = true; btn.innerText = "İşleniyor..."; const islemTarihi = new Date(`${tarih}T${saat}:00`); const secilenPersonel = aktifPersonelListesi.find(p => p.id === pId); await addDoc(collection(db, "yoklamalar"), { adSoyad: secilenPersonel.adSoyad, kullaniciAdi: secilenPersonel.kAdi, islemZamani: Timestamp.fromDate(islemTarihi), durum: islem, sistemNotu: `İK Manuel Giriş: ${sebep}` }); await updateDoc(doc(db, "personeller", pId), { sonDurum: islem }); msj.innerText = "Sisteme İşlendi!"; msj.classList.remove("hidden"); msj.classList.add("text-limey"); setTimeout(() => { msj.classList.add("hidden"); btn.disabled = false; btn.innerText = "Sisteme İşle"; document.getElementById("m-sebep").value=""; }, 2000); });
-
-    // SPRINT 4: SİMÜLASYON VE RAPORLAMA MOTORU
-    
-    // Gelişmiş Tarih Formatlayıcı
-    function tarihFormatla(tarih) { return tarih.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' }); }
-    function saatFormatla(tarih) { return tarih.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }); }
-    function dakikaCevir(dakika) { const s = Math.floor(dakika / 60); const d = Math.round(dakika % 60); return `${s}s ${d}d`; }
-
-    let excelVerileri = [];
-
-    // RAPOR GETİR BUTONU
-    document.getElementById("btn-rapor-getir").addEventListener("click", async () => {
-        const btn = document.getElementById("btn-rapor-getir"); btn.innerText = "Hesaplanıyor..."; btn.disabled = true;
-        const baslaTarih = document.getElementById("rapor-basla").value; const bitisTarih = document.getElementById("rapor-bitis").value;
-        const sonucAlani = document.getElementById("rapor-sonuclari-alani"); const tablo = document.getElementById("rapor-tablo-govdesi");
-        
-        // Tüm Yoklamaları Çek
-        const snap = await getDocs(query(collection(db, "yoklamalar")));
-        let kayitlar = [];
-        snap.forEach(d => {
-            const data = d.data();
-            if(data.islemZamani) kayitlar.push({ ...data, tarihObj: data.islemZamani.toDate() });
-        });
-
-        // Verileri Gün bazında ve Personel bazında grupla
-        let grupluData = {};
-        kayitlar.forEach(k => {
-            const dateStr = k.tarihObj.toISOString().split('T')[0];
-            // Filtre kontrolü
-            if(baslaTarih && dateStr < baslaTarih) return;
-            if(bitisTarih && dateStr > bitisTarih) return;
-
-            const key = `${k.adSoyad}_${dateStr}`;
-            if(!grupluData[key]) grupluData[key] = { personel: k.adSoyad, tarihStr: dateStr, tarihGosterim: tarihFormatla(k.tarihObj), hareketler: [], tamGunMu: false };
-            grupluData[key].hareketler.push(k);
-            if(k.durum.includes("Tam Gün")) grupluData[key].tamGunMu = k.durum;
-        });
-
-        tablo.innerHTML = ""; excelVerileri = [];
-        
-        // Jilet Gibi Hesaplama Motoru
-        Object.values(grupluData).sort((a,b) => a.tarihStr.localeCompare(b.tarihStr)).forEach(gunluk => {
-            gunluk.hareketler.sort((a,b) => a.tarihObj - b.tarihObj);
-            let ilkGiris = "-"; let sonCikis = "-"; let izinSuresiDk = 0; let netCalismaDk = 0;
-            
-            if(gunluk.tamGunMu) {
-                ilkGiris = "08:00"; sonCikis = "18:00"; netCalismaDk = 0; // Tam gün izinliyse çalışmadı
-            } else {
-                const girisler = gunluk.hareketler.filter(h => h.durum === "İşe Giriş");
-                const cikislar = gunluk.hareketler.filter(h => h.durum === "İşten Çıkış");
-                const izCikislari = gunluk.hareketler.filter(h => h.durum.includes("Çıkışı") && h.durum !== "İşten Çıkış");
-                const izDonusleri = gunluk.hareketler.filter(h => h.durum.includes("Dönüşü"));
-
-                if(girisler.length > 0) ilkGiris = saatFormatla(girisler[0].tarihObj);
-                if(cikislar.length > 0) sonCikis = saatFormatla(cikislar[cikislar.length - 1].tarihObj);
-
-                // Saatlik izin süresi hesaplama (Çıkış ile Dönüş arasındaki fark)
-                for(let i=0; i < izCikislari.length; i++) {
-                    const cikisS = izCikislari[i].tarihObj;
-                    const donusS = izDonusleri[i] ? izDonusleri[i].tarihObj : null;
-                    if(donusS) izinSuresiDk += (donusS - cikisS) / (1000 * 60);
-                }
-
-                // Brüt mesai (İlk giriş ile Son çıkış arası)
-                if(girisler.length > 0 && cikislar.length > 0) {
-                    const brutDk = (cikislar[cikislar.length - 1].tarihObj - girisler[0].tarihObj) / (1000 * 60);
-                    netCalismaDk = brutDk - izinSuresiDk;
-                }
-            }
-
-            // Tabloya Yaz
-            tablo.innerHTML += `<tr class="border-b border-zinc-800/50 hover:bg-zinc-800/30 transition">
-                <td class="px-4 py-3 font-mono">${gunluk.tarihGosterim}</td>
-                <td class="px-4 py-3 font-bold text-white">${gunluk.personel}</td>
-                <td class="px-4 py-3 text-green-400 font-bold">${ilkGiris}</td>
-                <td class="px-4 py-3 text-red-400 font-bold">${sonCikis}</td>
-                <td class="px-4 py-3 text-orange-400 font-medium">${izinSuresiDk > 0 ? dakikaCevir(izinSuresiDk) : '-'}</td>
-                <td class="px-4 py-3 text-white font-bold">${netCalismaDk > 0 ? dakikaCevir(netCalismaDk) : '-'}</td>
-                <td class="px-4 py-3 text-blue-400 font-medium">${gunluk.tamGunMu ? gunluk.tamGunMu : '-'}</td>
-            </tr>`;
-
-            // Excel İçin Array'e Ekle
-            excelVerileri.push({
-                "Tarih": gunluk.tarihGosterim,
-                "Personel Adı": gunluk.personel,
-                "İşe Giriş": ilkGiris,
-                "İşten Çıkış": sonCikis,
-                "Kullanılan İzin (Saat)": izinSuresiDk > 0 ? dakikaCevir(izinSuresiDk) : '0',
-                "Net Çalışma Süresi": netCalismaDk > 0 ? dakikaCevir(netCalismaDk) : '0',
-                "Tam Gün Durumu": gunluk.tamGunMu ? gunluk.tamGunMu : 'Yok'
-            });
-        });
-
-        if(excelVerileri.length === 0) tablo.innerHTML = `<tr><td colspan="7" class="px-4 py-8 text-center text-zinc-500">Seçilen tarihler arasında kayıt bulunamadı.</td></tr>`;
-        
-        sonucAlani.classList.remove("hidden");
-        btn.innerText = "Verileri Hesapla"; btn.disabled = false;
+    document.getElementById("personel-kaydet-btn").addEventListener("click", async () => {
+      const msj = document.getElementById("personel-mesaj"); if(!document.getElementById("p-ad").value || !document.getElementById("p-kadi").value) { msj.innerText="Eksik bilgi!"; msj.className="text-sm font-bold text-center mt-2 text-red-400 block"; return;}
+      const data = { ad: document.getElementById("p-ad").value.trim(), soyad: document.getElementById("p-soyad").value.trim(), dogum: document.getElementById("p-dogum").value, tel: document.getElementById("p-tel").value, tip: document.getElementById("p-tip").value, gorev: document.getElementById("p-gorev").value, giris: document.getElementById("p-giris").value, devirIzin: parseInt(document.getElementById("p-devir").value)||0, kAdi: document.getElementById("p-kadi").value.trim().toLowerCase(), sifre: document.getElementById("p-sifre").value, aktifMi: true };
+      try { if(duzenlenenPersonelId) { await updateDoc(doc(db, "personeller", duzenlenenPersonelId), data); } else { data.sonDurum = "İşten Çıkış"; await addDoc(collection(db, "personeller"), data); }
+          msj.innerText="İşlem Başarılı!"; msj.className="text-sm font-bold text-center mt-2 text-limey block"; setTimeout(()=>{ document.getElementById("form-kapat-btn").click(); msj.classList.add("hidden");}, 1500);
+      } catch(e) { msj.innerText="Hata!"; }
     });
 
-    // EXCEL İNDİR BUTONU
-    document.getElementById("btn-excel-indir").addEventListener("click", () => {
-        if(excelVerileri.length === 0) return alert("İndirilecek veri yok.");
-        const ws = XLSX.utils.json_to_sheet(excelVerileri);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Tempo Yoklama Raporu");
-        XLSX.writeFile(wb, "Tempo_Puantaj_Raporu.xlsx");
+    window.izinModalAc = (id, personel, tur) => { seciliIzinId = id; document.getElementById("modal-izin-detay").innerText = `Personel: ${personel} | Tür: ${tur}`; document.getElementById("izin-onay-modal").classList.remove("hidden"); };
+    document.getElementById("modal-iptal-btn").addEventListener("click", () => { document.getElementById("izin-onay-modal").classList.add("hidden"); seciliIzinId = null; });
+    document.getElementById("modal-onayla-btn").addEventListener("click", async () => { const secim = document.querySelector('input[name="kesintiTuru"]:checked').value; if(seciliIzinId) { await updateDoc(doc(db, "izinTalepleri", seciliIzinId), { durum: "Onaylandı", kesintiTuru: secim }); document.getElementById("izin-onay-modal").classList.add("hidden"); } });
+    window.izinReddet = async (id) => { if(confirm("Talebi reddetmek istediğinize emin misiniz?")) await updateDoc(doc(db, "izinTalepleri", id), { durum: "Reddedildi", kesintiTuru: "Reddedildi" }); };
+
+    document.getElementById("manuel-kaydet-btn").addEventListener("click", async () => {
+      const btn = document.getElementById("manuel-kaydet-btn"); const msj = document.getElementById("manuel-mesaj");
+      const pId = document.getElementById("m-personel").value; const islem = document.getElementById("m-islem").value; const tarih = document.getElementById("m-tarih").value; const saat = document.getElementById("m-saat").value; const sebep = document.getElementById("m-sebep").value.trim();
+      if(!pId || !tarih || !saat) return;
+      btn.disabled = true; btn.innerText = "İşleniyor...";
+      const islemTarihi = new Date(`${tarih}T${saat}:00`); const secilenPersonel = aktifPersonelListesi.find(p => p.id === pId);
+      
+      await addDoc(collection(db, "yoklamalar"), { adSoyad: secilenPersonel.adSoyad, kullaniciAdi: secilenPersonel.kAdi, islemZamani: Timestamp.fromDate(islemTarihi), durum: islem, sistemNotu: `İK Manuel Giriş: ${sebep}` });
+      await updateDoc(doc(db, "personeller", pId), { sonDurum: islem }); 
+      
+      msj.innerText = "Sisteme İşlendi!"; msj.classList.remove("hidden"); msj.classList.add("text-limey"); setTimeout(() => { msj.classList.add("hidden"); btn.disabled = false; btn.innerText = "Sisteme İşle"; document.getElementById("m-sebep").value=""; }, 2000);
     });
 
-    // 🧪 SİMÜLASYON MOTORU (AHMET VE MEHMET'İN 2.5 AYLIK ÇİLESİ)
-    document.getElementById("btn-simulasyon").addEventListener("click", async () => {
-        if(!confirm("DİKKAT! Bu işlem veritabanına 1 Ocak 2026'dan bugüne kadar 150+ otomatik kayıt ekleyecektir. Eski verileri temizlediğinizden emin misiniz?")) return;
-        
-        const btn = document.getElementById("btn-simulasyon"); const msj = document.getElementById("simulasyon-mesaj");
-        btn.disabled = true; btn.innerText = "Zaman Makinesi Çalışıyor... Lütfen Bekleyin!";
-        
-        try {
-            const batch = writeBatch(db);
-            const ahmet = { adSoyad: "Ahmet Çelik", kAdi: "ahmet" };
-            const mehmet = { adSoyad: "Mehmet Bakır", kAdi: "mehmet" };
-            
-            // Personel koleksiyonuna ekle (Eğer yoklarsa)
-            batch.set(doc(collection(db, "personeller")), { ...ahmet, sifre: "123", aktifMi: true, tip: "Üretim", devirIzin: 5, sonDurum: "İşten Çıkış" });
-            batch.set(doc(collection(db, "personeller")), { ...mehmet, sifre: "123", aktifMi: true, tip: "Üretim", devirIzin: 0, sonDurum: "İşten Çıkış" });
-
-            const baslangic = new Date("2026-01-01T08:00:00");
-            const bitis = new Date("2026-03-13T18:00:00");
-            
-            // Random dakika üretici (Giriş çıkışlar milimetrik olmasın diye)
-            const rGiris = () => Math.floor(Math.random() * 20); // 08:00 - 08:20 arası
-            const rCikis = () => Math.floor(Math.random() * 30); // 18:00 - 18:30 arası
-
-            for (let d = new Date(baslangic); d <= bitis; d.setDate(d.getDate() + 1)) {
-                // Pazar günleri atla
-                if (d.getDay() === 0) continue; 
-                
-                let ahmetGiris = new Date(d); ahmetGiris.setHours(8, rGiris(), 0);
-                let ahmetCikis = new Date(d); ahmetCikis.setHours(18, rCikis(), 0);
-                
-                let mehmetGiris = new Date(d); mehmetGiris.setHours(7, 50 + rGiris(), 0);
-                let mehmetCikis = new Date(d); mehmetCikis.setHours(18, rCikis(), 0);
-
-                // Cumartesi yarım gün
-                if(d.getDay() === 6) { ahmetCikis.setHours(13, rCikis(), 0); mehmetCikis.setHours(13, rCikis(), 0); }
-
-                // SENARYO 1: Ahmet'in meşhur hastane günü (18 Şubat 2026)
-                if(d.toISOString().startsWith("2026-02-18")) {
-                    let hCikis = new Date(d); hCikis.setHours(11, 30, 0); // Hastaneye gidiş
-                    let hDonus = new Date(d); hDonus.setHours(14, 45, 0); // Dönüş
-                    
-                    batch.set(doc(collection(db, "yoklamalar")), { adSoyad: ahmet.adSoyad, kullaniciAdi: ahmet.kAdi, durum: "İşe Giriş", islemZamani: Timestamp.fromDate(ahmetGiris), sistemNotu: "Simülasyon" });
-                    batch.set(doc(collection(db, "yoklamalar")), { adSoyad: ahmet.adSoyad, kullaniciAdi: ahmet.kAdi, durum: "İzin Çıkışı", islemZamani: Timestamp.fromDate(hCikis), sistemNotu: "Simülasyon" });
-                    batch.set(doc(collection(db, "yoklamalar")), { adSoyad: ahmet.adSoyad, kullaniciAdi: ahmet.kAdi, durum: "İzin Dönüşü", islemZamani: Timestamp.fromDate(hDonus), sistemNotu: "Simülasyon" });
-                    batch.set(doc(collection(db, "yoklamalar")), { adSoyad: ahmet.adSoyad, kullaniciAdi: ahmet.kAdi, durum: "İşten Çıkış", islemZamani: Timestamp.fromDate(ahmetCikis), sistemNotu: "Simülasyon" });
-                    
-                    // Normal Mehmet
-                    batch.set(doc(collection(db, "yoklamalar")), { adSoyad: mehmet.adSoyad, kullaniciAdi: mehmet.kAdi, durum: "İşe Giriş", islemZamani: Timestamp.fromDate(mehmetGiris), sistemNotu: "Simülasyon" });
-                    batch.set(doc(collection(db, "yoklamalar")), { adSoyad: mehmet.adSoyad, kullaniciAdi: mehmet.kAdi, durum: "İşten Çıkış", islemZamani: Timestamp.fromDate(mehmetCikis), sistemNotu: "Simülasyon" });
-                    continue;
-                }
-
-                // SENARYO 2: Mehmet Tam Gün Yıllık İzin (5 Mart 2026)
-                if(d.toISOString().startsWith("2026-03-05")) {
-                    let izinVakti = new Date(d); izinVakti.setHours(8, 0, 0);
-                    batch.set(doc(collection(db, "yoklamalar")), { adSoyad: mehmet.adSoyad, kullaniciAdi: mehmet.kAdi, durum: "Tam Gün Yıllık İzin", islemZamani: Timestamp.fromDate(izinVakti), sistemNotu: "Simülasyon Manuel" });
-                    
-                    // Normal Ahmet
-                    batch.set(doc(collection(db, "yoklamalar")), { adSoyad: ahmet.adSoyad, kullaniciAdi: ahmet.kAdi, durum: "İşe Giriş", islemZamani: Timestamp.fromDate(ahmetGiris), sistemNotu: "Simülasyon" });
-                    batch.set(doc(collection(db, "yoklamalar")), { adSoyad: ahmet.adSoyad, kullaniciAdi: ahmet.kAdi, durum: "İşten Çıkış", islemZamani: Timestamp.fromDate(ahmetCikis), sistemNotu: "Simülasyon" });
-                    continue;
-                }
-
-                // Normal Günler (Ahmet ve Mehmet)
-                batch.set(doc(collection(db, "yoklamalar")), { adSoyad: ahmet.adSoyad, kullaniciAdi: ahmet.kAdi, durum: "İşe Giriş", islemZamani: Timestamp.fromDate(ahmetGiris), sistemNotu: "Simülasyon" });
-                batch.set(doc(collection(db, "yoklamalar")), { adSoyad: ahmet.adSoyad, kullaniciAdi: ahmet.kAdi, durum: "İşten Çıkış", islemZamani: Timestamp.fromDate(ahmetCikis), sistemNotu: "Simülasyon" });
-                
-                batch.set(doc(collection(db, "yoklamalar")), { adSoyad: mehmet.adSoyad, kullaniciAdi: mehmet.kAdi, durum: "İşe Giriş", islemZamani: Timestamp.fromDate(mehmetGiris), sistemNotu: "Simülasyon" });
-                batch.set(doc(collection(db, "yoklamalar")), { adSoyad: mehmet.adSoyad, kullaniciAdi: mehmet.kAdi, durum: "İşten Çıkış", islemZamani: Timestamp.fromDate(mehmetCikis), sistemNotu: "Simülasyon" });
-            }
-
-            await batch.commit();
-            msj.innerText = "Simülasyon Başarıyla Tamamlandı! Yukarıdan 'Verileri Hesapla' butonuna basarak Raporu görün.";
-            msj.classList.remove("hidden");
-            btn.innerText = "Simülasyon Bitti";
-        } catch (error) {
-            console.error(error);
-            msj.innerText = "Hata oluştu!"; msj.classList.replace("text-limey", "text-red-400"); msj.classList.remove("hidden");
-            btn.disabled = false; btn.innerText = "Tekrar Dene";
-        }
-    });
-
+    const gpsToggle = document.getElementById("gps-toggle"); const ayarDocRef = doc(db, "ayarlar", "sistem");
+    onSnapshot(ayarDocRef, (docSnap) => { if(docSnap.exists()) gpsToggle.checked = docSnap.data().gpsZorunlu; else setDoc(ayarDocRef, { gpsZorunlu: true }); });
+    gpsToggle.addEventListener("change", async (e) => { await updateDoc(ayarDocRef, { gpsZorunlu: e.target.checked }); });
   </script>
 </body>
 </html>
